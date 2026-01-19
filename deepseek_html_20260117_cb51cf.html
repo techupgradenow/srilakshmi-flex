@@ -1,0 +1,1471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ProPrint Solutions | Premium Flex Banner & Printing</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Montserrat:wght@400;500;600;700;800&display=swap">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <style>
+        :root {
+            --primary-color: #0a2c5a; /* Dark Blue */
+            --secondary-color: #ffc107; /* Yellow */
+            --accent-color: #ff6b35; /* Orange accent for animations */
+            --light-color: #f8f9fa;
+            --dark-color: #222;
+            --gray-color: #6c757d;
+            --light-gray: #f1f1f1;
+            --white: #ffffff;
+            --transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            line-height: 1.6;
+            color: var(--dark-color);
+            overflow-x: hidden;
+            background-color: var(--white);
+        }
+        
+        h1, h2, h3, h4, h5 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            margin-bottom: 1.2rem;
+            color: var(--primary-color);
+        }
+        
+        h1 {
+            font-size: 3.5rem;
+            line-height: 1.1;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 5px 15px rgba(10, 44, 90, 0.1);
+        }
+        
+        h2 {
+            font-size: 2.8rem;
+            position: relative;
+            display: inline-block;
+        }
+        
+        h2:after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -10px;
+            width: 80px;
+            height: 5px;
+            background: linear-gradient(90deg, var(--secondary-color), var(--accent-color));
+            border-radius: 3px;
+            transform-origin: left;
+            animation: expandLine 1s 0.5s forwards;
+            transform: scaleX(0);
+        }
+        
+        @keyframes expandLine {
+            to { transform: scaleX(1); }
+        }
+        
+        p {
+            margin-bottom: 1.2rem;
+            color: var(--gray-color);
+            font-size: 1.05rem;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+        
+        .section-padding {
+            padding: 6rem 0;
+        }
+        
+        .text-center {
+            text-align: center;
+        }
+        
+        .text-center h2:after {
+            left: 50%;
+            transform: translateX(-50%) scaleX(0);
+            animation: expandLineCenter 1s 0.5s forwards;
+        }
+        
+        @keyframes expandLineCenter {
+            to { transform: translateX(-50%) scaleX(1); }
+        }
+        
+        /* Animated Background Elements */
+        .animated-bg {
+            position: absolute;
+            z-index: -1;
+            opacity: 0.1;
+            animation: float 20s infinite ease-in-out;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+        
+        /* Button Styles with Animation */
+        .btn {
+            display: inline-block;
+            padding: 1rem 2.2rem;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: var(--transition);
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+        
+        .btn:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: 0.5s;
+            z-index: -1;
+        }
+        
+        .btn:hover:before {
+            left: 100%;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--secondary-color), #ffb300);
+            color: var(--primary-color);
+            box-shadow: 0 10px 20px rgba(255, 193, 7, 0.3);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(255, 193, 7, 0.4);
+        }
+        
+        .btn-secondary {
+            background: linear-gradient(135deg, var(--primary-color), #08306b);
+            color: var(--white);
+            box-shadow: 0 10px 20px rgba(10, 44, 90, 0.3);
+        }
+        
+        .btn-secondary:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(10, 44, 90, 0.4);
+        }
+        
+        /* Header with Animation */
+        header {
+            background-color: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            transition: all 0.4s ease;
+        }
+        
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.2rem 2rem;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--primary-color);
+            text-decoration: none;
+            position: relative;
+        }
+        
+        .logo:after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 30px;
+            height: 3px;
+            background-color: var(--secondary-color);
+            transition: width 0.3s ease;
+        }
+        
+        .logo:hover:after {
+            width: 100%;
+        }
+        
+        .logo i {
+            color: var(--secondary-color);
+            margin-right: 0.7rem;
+            font-size: 2.2rem;
+            animation: spinLogo 20s linear infinite;
+        }
+        
+        @keyframes spinLogo {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .logo span {
+            color: var(--secondary-color);
+            position: relative;
+        }
+        
+        .logo span:after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: var(--primary-color);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+        
+        .logo:hover span:after {
+            transform: scaleX(1);
+        }
+        
+        .nav-menu {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-menu li {
+            margin-left: 2.5rem;
+            position: relative;
+        }
+        
+        .nav-menu a {
+            text-decoration: none;
+            color: var(--primary-color);
+            font-weight: 600;
+            font-size: 1.05rem;
+            transition: var(--transition);
+            position: relative;
+            padding: 0.5rem 0;
+        }
+        
+        .nav-menu a:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--secondary-color), var(--accent-color));
+            border-radius: 3px;
+            transition: width 0.3s ease;
+        }
+        
+        .nav-menu a:hover {
+            color: var(--secondary-color);
+        }
+        
+        .nav-menu a:hover:after {
+            width: 100%;
+        }
+        
+        .mobile-toggle {
+            display: none;
+            font-size: 1.8rem;
+            cursor: pointer;
+            color: var(--primary-color);
+            background: var(--secondary-color);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 5px 15px rgba(255, 193, 7, 0.3);
+            transition: var(--transition);
+        }
+        
+        .mobile-toggle:hover {
+            transform: rotate(90deg);
+        }
+        
+        /* Hero Section with Particles */
+        .hero {
+            background-color: var(--primary-color);
+            color: var(--white);
+            padding: 12rem 0 8rem;
+            margin-top: 80px;
+            position: relative;
+            overflow: hidden;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+        }
+        
+        #particles-js {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            animation: fadeInUp 1s ease-out;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .hero h1 {
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+            animation: fadeInUp 1s 0.2s both;
+        }
+        
+        .hero p {
+            font-size: 1.3rem;
+            margin-bottom: 2.5rem;
+            color: rgba(255, 255, 255, 0.85);
+            animation: fadeInUp 1s 0.4s both;
+        }
+        
+        .hero-btns {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            animation: fadeInUp 1s 0.6s both;
+        }
+        
+        /* Animated Typing Effect */
+        .typing-text {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .typing-text:after {
+            content: '|';
+            position: absolute;
+            right: -8px;
+            bottom: 0;
+            animation: blink 1s infinite;
+            color: var(--secondary-color);
+        }
+        
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+        
+        /* Why Choose Us Section */
+        .why-us {
+            background-color: var(--light-gray);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2.5rem;
+            margin-top: 4rem;
+        }
+        
+        .feature-card {
+            background-color: var(--white);
+            padding: 2.5rem 2rem;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+        
+        .feature-card:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--secondary-color), var(--accent-color));
+            z-index: 2;
+        }
+        
+        .feature-card:after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 0;
+            background: linear-gradient(135deg, var(--primary-color), #08306b);
+            transition: height 0.5s ease;
+            z-index: -1;
+            border-radius: 15px;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-15px) scale(1.03);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+        
+        .feature-card:hover:after {
+            height: 100%;
+        }
+        
+        .feature-card:hover .feature-icon,
+        .feature-card:hover h3,
+        .feature-card:hover p {
+            color: var(--white);
+        }
+        
+        .feature-icon {
+            font-size: 3.5rem;
+            color: var(--secondary-color);
+            margin-bottom: 1.5rem;
+            transition: var(--transition);
+            position: relative;
+            display: inline-block;
+        }
+        
+        .feature-icon:after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80px;
+            height: 80px;
+            background-color: rgba(255, 193, 7, 0.1);
+            border-radius: 50%;
+            z-index: -1;
+        }
+        
+        .feature-card h3 {
+            font-size: 1.6rem;
+            transition: var(--transition);
+        }
+        
+        .feature-card p {
+            transition: var(--transition);
+        }
+        
+        /* Services Section with Hover Effects */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2.5rem;
+            margin-top: 4rem;
+        }
+        
+        .service-card {
+            background-color: var(--white);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.08);
+            transition: var(--transition);
+            position: relative;
+        }
+        
+        .service-card:hover {
+            transform: translateY(-15px) scale(1.03);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+        }
+        
+        .service-icon {
+            height: 180px;
+            background: linear-gradient(135deg, var(--primary-color), #08306b);
+            color: var(--white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .service-icon:after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+            transform: translateX(-100%);
+        }
+        
+        .service-card:hover .service-icon:after {
+            animation: shine 1.5s ease;
+        }
+        
+        @keyframes shine {
+            100% { transform: translateX(100%); }
+        }
+        
+        .service-content {
+            padding: 2rem;
+            position: relative;
+        }
+        
+        .service-content h3 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+        }
+        
+        .service-content p {
+            margin-bottom: 1.5rem;
+        }
+        
+        /* Projects Gallery with Hover Effects */
+        .projects {
+            background-color: var(--light-gray);
+            position: relative;
+        }
+        
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            margin-top: 4rem;
+        }
+        
+        .project-item {
+            position: relative;
+            border-radius: 15px;
+            overflow: hidden;
+            height: 280px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            transition: var(--transition);
+        }
+        
+        .project-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+        }
+        
+        .project-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.8s ease;
+        }
+        
+        .project-item:hover img {
+            transform: scale(1.2);
+        }
+        
+        .project-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, transparent, rgba(10, 44, 90, 0.95));
+            color: var(--white);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            align-items: flex-start;
+            padding: 2rem;
+            opacity: 0;
+            transition: var(--transition);
+        }
+        
+        .project-item:hover .project-overlay {
+            opacity: 1;
+        }
+        
+        .project-overlay h3 {
+            color: var(--white);
+            margin-bottom: 0.5rem;
+            transform: translateY(20px);
+            transition: transform 0.5s 0.2s;
+        }
+        
+        .project-overlay p {
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 1.5rem;
+            transform: translateY(20px);
+            transition: transform 0.5s 0.3s;
+        }
+        
+        .project-item:hover .project-overlay h3,
+        .project-item:hover .project-overlay p {
+            transform: translateY(0);
+        }
+        
+        /* Trust Indicators with Counter Animation */
+        .trust-indicators {
+            background: linear-gradient(135deg, var(--primary-color), #08306b);
+            color: var(--white);
+            padding: 5rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .indicators-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 3rem;
+            text-align: center;
+        }
+        
+        .indicator-item {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .indicator-item h3 {
+            font-size: 3.5rem;
+            color: var(--secondary-color);
+            margin-bottom: 0.5rem;
+        }
+        
+        .indicator-item p {
+            color: var(--white);
+            font-weight: 500;
+            font-size: 1.2rem;
+        }
+        
+        /* Quick Contact Strip */
+        .quick-contact {
+            background: linear-gradient(90deg, var(--primary-color), #08306b);
+            padding: 3rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .quick-contact .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+        
+        .quick-contact h3 {
+            color: var(--white);
+            margin-bottom: 0;
+            font-size: 1.8rem;
+        }
+        
+        .quick-contact-btns {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+        
+        /* Footer */
+        footer {
+            background-color: #051a38;
+            color: var(--white);
+            padding: 5rem 0 2rem;
+            position: relative;
+        }
+        
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            margin-bottom: 4rem;
+        }
+        
+        .footer-col h3 {
+            color: var(--white);
+            margin-bottom: 1.8rem;
+            font-size: 1.5rem;
+        }
+        
+        .footer-col h3:after {
+            background: linear-gradient(90deg, var(--secondary-color), var(--accent-color));
+        }
+        
+        .footer-col p, .footer-col a {
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        .footer-col a {
+            text-decoration: none;
+            display: block;
+            margin-bottom: 0.7rem;
+            transition: var(--transition);
+            position: relative;
+            padding-left: 0;
+        }
+        
+        .footer-col a:before {
+            content: '›';
+            position: absolute;
+            left: 0;
+            opacity: 0;
+            transition: var(--transition);
+            color: var(--secondary-color);
+        }
+        
+        .footer-col a:hover {
+            color: var(--secondary-color);
+            padding-left: 1.2rem;
+        }
+        
+        .footer-col a:hover:before {
+            opacity: 1;
+        }
+        
+        .social-icons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        
+        .social-icons a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            color: var(--white);
+            transition: var(--transition);
+        }
+        
+        .social-icons a:hover {
+            background-color: var(--secondary-color);
+            color: var(--primary-color);
+            transform: translateY(-5px);
+        }
+        
+        .footer-bottom {
+            text-align: center;
+            padding-top: 3rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.9rem;
+        }
+        
+        /* WhatsApp Floating Button with Animation */
+        .whatsapp-float {
+            position: fixed;
+            bottom: 2.5rem;
+            right: 2.5rem;
+            background: linear-gradient(135deg, #25D366, #1da851);
+            color: var(--white);
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            box-shadow: 0 10px 25px rgba(37, 211, 102, 0.5);
+            z-index: 999;
+            transition: var(--transition);
+            text-decoration: none;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(37, 211, 102, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
+        }
+        
+        .whatsapp-float:hover {
+            transform: scale(1.1) rotate(10deg);
+            animation: none;
+        }
+        
+        /* Scroll Progress Bar */
+        .scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--secondary-color), var(--accent-color));
+            z-index: 1001;
+            transition: width 0.1s ease;
+        }
+        
+        /* Responsive Styles */
+        @media (max-width: 1200px) {
+            h1 { font-size: 3rem; }
+            h2 { font-size: 2.4rem; }
+            .hero h1 { font-size: 3.2rem; }
+        }
+        
+        @media (max-width: 992px) {
+            h1 { font-size: 2.6rem; }
+            h2 { font-size: 2.2rem; }
+            .hero { padding: 10rem 0 6rem; }
+            .hero h1 { font-size: 2.8rem; }
+            .section-padding { padding: 4rem 0; }
+        }
+        
+        @media (max-width: 768px) {
+            .mobile-toggle {
+                display: flex;
+            }
+            
+            .nav-menu {
+                position: fixed;
+                top: 80px;
+                left: -100%;
+                width: 100%;
+                flex-direction: column;
+                background-color: rgba(255, 255, 255, 0.98);
+                text-align: center;
+                transition: var(--transition);
+                backdrop-filter: blur(10px);
+                padding: 2rem 0;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+                z-index: 999;
+            }
+            
+            .nav-menu.active {
+                left: 0;
+            }
+            
+            .nav-menu li {
+                margin: 0;
+                padding: 1rem 0;
+            }
+            
+            .hero-btns {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .hero-btns .btn {
+                width: 100%;
+                text-align: center;
+                margin-bottom: 1rem;
+            }
+            
+            .quick-contact .container {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            h1 { font-size: 2.2rem; }
+            h2 { font-size: 1.9rem; }
+            .hero h1 { font-size: 2.4rem; }
+            .container { padding: 0 1.5rem; }
+            .section-padding { padding: 3rem 0; }
+            .indicators-grid { grid-template-columns: 1fr; }
+        }
+        
+        /* Animation Classes */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+        
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .zoom-in {
+            opacity: 0;
+            transform: scale(0.9);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+        
+        .zoom-in.visible {
+            opacity: 1;
+            transform: scale(1);
+        }
+        
+        /* Particle Animation Controls */
+        .particles-control {
+            position: fixed;
+            bottom: 120px;
+            right: 30px;
+            z-index: 999;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            display: flex;
+            gap: 10px;
+        }
+        
+        .particle-toggle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .particle-toggle:hover {
+            background: var(--secondary-color);
+            color: var(--primary-color);
+        }
+    </style>
+</head>
+<body>
+    <!-- Scroll Progress Bar -->
+    <div class="scroll-progress" id="scrollProgress"></div>
+    
+    <!-- Header & Navigation -->
+    <header id="mainHeader">
+        <div class="container header-container">
+            <a href="#" class="logo">
+                <i class="fas fa-print"></i> Pro<span>Print</span>
+            </a>
+            
+            <div class="mobile-toggle" id="mobileToggle">
+                <i class="fas fa-bars"></i>
+            </div>
+            
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="#home" class="nav-link active">Home</a></li>
+                <li><a href="#why-us" class="nav-link">Why Choose Us</a></li>
+                <li><a href="#services" class="nav-link">Services</a></li>
+                <li><a href="#projects" class="nav-link">Our Work</a></li>
+                <li><a href="#contact" class="nav-link">Contact</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <!-- Particles Background -->
+        <div id="particles-js"></div>
+        
+        <div class="container">
+            <div class="hero-content">
+                <h1>Professional <span class="typing-text">Flex Banner & Printing Solutions</span></h1>
+                <p>Premium Flex | UV Prints | Posters | Medals | Custom Branding for businesses of all sizes</p>
+                <div class="hero-btns">
+                    <a href="#contact" class="btn btn-primary">Get Free Quote</a>
+                    <a href="https://wa.me/1234567890" target="_blank" class="btn btn-secondary">
+                        <i class="fab fa-whatsapp"></i> WhatsApp Now
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Animated Background Shapes -->
+        <div class="animated-bg" style="top: 10%; left: 5%; font-size: 5rem; color: var(--secondary-color);">
+            <i class="fas fa-circle"></i>
+        </div>
+        <div class="animated-bg" style="top: 70%; right: 10%; font-size: 4rem; color: var(--accent-color); animation-delay: -5s;">
+            <i class="fas fa-square"></i>
+        </div>
+        <div class="animated-bg" style="top: 20%; right: 15%; font-size: 3rem; color: rgba(255,255,255,0.3); animation-delay: -10s;">
+            <i class="fas fa-triangle"></i>
+        </div>
+    </section>
+
+    <!-- Why Choose Us Section -->
+    <section class="section-padding why-us" id="why-us">
+        <div class="container">
+            <h2 class="text-center fade-in">Why Choose Us</h2>
+            <p class="text-center fade-in">We deliver premium quality printing solutions with fast turnaround times and competitive pricing.</p>
+            
+            <div class="features-grid">
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">
+                        <i class="fas fa-award"></i>
+                    </div>
+                    <h3>Premium Quality Materials</h3>
+                    <p>We use only the highest quality materials for all our printing products to ensure durability and vibrant results.</p>
+                </div>
+                
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">
+                        <i class="fas fa-shipping-fast"></i>
+                    </div>
+                    <h3>Fast Delivery</h3>
+                    <p>We understand time is crucial. Our efficient processes ensure timely delivery without compromising on quality.</p>
+                </div>
+                
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">
+                        <i class="fas fa-tags"></i>
+                    </div>
+                    <h3>Affordable Pricing</h3>
+                    <p>Competitive pricing for both small and bulk orders without hidden charges. Get value for your investment.</p>
+                </div>
+                
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">
+                        <i class="fas fa-palette"></i>
+                    </div>
+                    <h3>Custom Designs</h3>
+                    <p>Our creative team works with you to bring your vision to life with custom designs tailored to your brand.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Our Services Section -->
+    <section class="section-padding" id="services">
+        <div class="container">
+            <h2 class="text-center fade-in">Our Services</h2>
+            <p class="text-center fade-in">Comprehensive printing solutions for all your business and personal needs.</p>
+            
+            <div class="services-grid">
+                <div class="service-card fade-in">
+                    <div class="service-icon">
+                        <i class="fas fa-flag"></i>
+                    </div>
+                    <div class="service-content">
+                        <h3>Flex Banner Printing</h3>
+                        <p>High-quality flex banners for indoor and outdoor advertising, events, and promotions in all sizes.</p>
+                        <a href="#contact" class="btn btn-primary">Get Quote</a>
+                    </div>
+                </div>
+                
+                <div class="service-card fade-in">
+                    <div class="service-icon">
+                        <i class="fas fa-image"></i>
+                    </div>
+                    <div class="service-content">
+                        <h3>Poster Printing</h3>
+                        <p>Posters in all sizes for events, movies, promotions, and decorative purposes with vibrant colors.</p>
+                        <a href="#contact" class="btn btn-primary">Get Quote</a>
+                    </div>
+                </div>
+                
+                <div class="service-card fade-in">
+                    <div class="service-icon">
+                        <i class="fas fa-sun"></i>
+                    </div>
+                    <div class="service-content">
+                        <h3>UV Printing</h3>
+                        <p>UV printing on various materials for vibrant, durable, and long-lasting prints that stand out.</p>
+                        <a href="#contact" class="btn btn-primary">Get Quote</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Completed Projects Preview -->
+    <section class="section-padding projects" id="projects">
+        <div class="container">
+            <h2 class="text-center fade-in">Our Completed Projects</h2>
+            <p class="text-center fade-in">A showcase of our recent work across different printing categories.</p>
+            
+            <div class="projects-grid">
+                <div class="project-item zoom-in">
+                    <img src="https://images.unsplash.com/photo-1545235617-9465d2a55698?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="Flex Banner Project">
+                    <div class="project-overlay">
+                        <h3>Retail Store Banner</h3>
+                        <p>Large format flex banner for a retail store opening event.</p>
+                        <a href="#contact" class="btn btn-primary">Order Similar</a>
+                    </div>
+                </div>
+                
+                <div class="project-item zoom-in">
+                    <img src="https://images.unsplash.com/photo-1561070791-2526d30994b5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="Poster Printing">
+                    <div class="project-overlay">
+                        <h3>Event Poster</h3>
+                        <p>Promotional poster for a music concert with vibrant colors.</p>
+                        <a href="#contact" class="btn btn-primary">Order Similar</a>
+                    </div>
+                </div>
+                
+                <div class="project-item zoom-in">
+                    <img src="https://images.unsplash.com/photo-1612815154852-4c83c8b5eab5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="UV Printing">
+                    <div class="project-overlay">
+                        <h3>Custom UV Print</h3>
+                        <p>UV printed acrylic sign for corporate office branding.</p>
+                        <a href="#contact" class="btn btn-primary">Order Similar</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Trust Indicators -->
+    <section class="trust-indicators">
+        <div class="container">
+            <div class="indicators-grid">
+                <div class="indicator-item">
+                    <h3 class="counter" data-count="15">0</h3>
+                    <p>Years of Experience</p>
+                </div>
+                
+                <div class="indicator-item">
+                    <h3 class="counter" data-count="2500">0</h3>
+                    <p>Projects Completed</p>
+                </div>
+                
+                <div class="indicator-item">
+                    <h3 class="counter" data-count="98">0</h3>
+                    <p>Happy Customers (%)</p>
+                </div>
+                
+                <div class="indicator-item">
+                    <h3 class="counter" data-count="500">0</h3>
+                    <p>Repeat Clients</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quick Contact Strip -->
+    <section class="quick-contact" id="contact">
+        <div class="container">
+            <h3>Ready to start your printing project?</h3>
+            <div class="quick-contact-btns">
+                <a href="tel:+1234567890" class="btn btn-primary">
+                    <i class="fas fa-phone-alt"></i> Call Now
+                </a>
+                <a href="https://wa.me/1234567890" target="_blank" class="btn btn-secondary">
+                    <i class="fab fa-whatsapp"></i> WhatsApp
+                </a>
+                <a href="#contact-form" class="btn btn-primary">
+                    <i class="fas fa-envelope"></i> Email Quote
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h3>ProPrint Solutions</h3>
+                    <p>Your trusted partner for high-quality flex banner and printing solutions. We deliver professional results with fast turnaround times and competitive pricing.</p>
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-col">
+                    <h3>Quick Links</h3>
+                    <a href="#home">Home</a>
+                    <a href="#why-us">Why Choose Us</a>
+                    <a href="#services">Services</a>
+                    <a href="#projects">Our Work</a>
+                    <a href="#contact">Contact</a>
+                </div>
+                
+                <div class="footer-col">
+                    <h3>Our Services</h3>
+                    <a href="#services">Flex Banner Printing</a>
+                    <a href="#services">Poster Printing</a>
+                    <a href="#services">UV Printing</a>
+                    <a href="#services">Vinyl & Flex Board</a>
+                    <a href="#services">Medals & Trophies</a>
+                </div>
+                
+                <div class="footer-col">
+                    <h3>Contact Info</h3>
+                    <p><i class="fas fa-map-marker-alt"></i> 123 Printing Street, Business City</p>
+                    <p><i class="fas fa-phone"></i> +1 (234) 567-8900</p>
+                    <p><i class="fas fa-envelope"></i> info@proprintsolutions.com</p>
+                    <p><i class="fas fa-clock"></i> Mon-Sat: 9:00 AM - 7:00 PM</p>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2023 ProPrint Solutions. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- WhatsApp Floating Button -->
+    <a href="https://wa.me/1234567890" target="_blank" class="whatsapp-float">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <!-- Particles Control Panel -->
+    <div class="particles-control">
+        <div class="particle-toggle" id="toggleParticles">
+            <i class="fas fa-atom"></i>
+        </div>
+        <div class="particle-toggle" id="changeParticles">
+            <i class="fas fa-sync-alt"></i>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        $(document).ready(function() {
+            // Initialize Particles.js
+            particlesJS('particles-js', {
+                particles: {
+                    number: { value: 80, density: { enable: true, value_area: 800 } },
+                    color: { value: "#ffc107" },
+                    shape: { type: "circle" },
+                    opacity: { value: 0.5, random: true },
+                    size: { value: 3, random: true },
+                    line_linked: {
+                        enable: true,
+                        distance: 150,
+                        color: "#ffffff",
+                        opacity: 0.2,
+                        width: 1
+                    },
+                    move: {
+                        enable: true,
+                        speed: 2,
+                        direction: "none",
+                        random: true,
+                        straight: false,
+                        out_mode: "out",
+                        bounce: false
+                    }
+                },
+                interactivity: {
+                    detect_on: "canvas",
+                    events: {
+                        onhover: { enable: true, mode: "repulse" },
+                        onclick: { enable: true, mode: "push" }
+                    }
+                },
+                retina_detect: true
+            });
+            
+            // Mobile navigation toggle
+            $('#mobileToggle').click(function() {
+                $('#navMenu').toggleClass('active');
+                $(this).toggleClass('active');
+            });
+            
+            // Close mobile menu when clicking on a link
+            $('.nav-link').click(function() {
+                $('#navMenu').removeClass('active');
+                $('#mobileToggle').removeClass('active');
+                
+                // Update active nav link
+                $('.nav-link').removeClass('active');
+                $(this).addClass('active');
+            });
+            
+            // Scroll progress bar
+            $(window).scroll(function() {
+                var scrollTop = $(this).scrollTop();
+                var docHeight = $(document).height();
+                var winHeight = $(this).height();
+                var scrollPercent = (scrollTop / (docHeight - winHeight)) * 100;
+                
+                $('#scrollProgress').css('width', scrollPercent + '%');
+                
+                // Header background on scroll
+                if (scrollTop > 100) {
+                    $('#mainHeader').css({
+                        'background-color': 'rgba(255, 255, 255, 0.98)',
+                        'box-shadow': '0 5px 20px rgba(0, 0, 0, 0.1)'
+                    });
+                } else {
+                    $('#mainHeader').css({
+                        'background-color': 'rgba(255, 255, 255, 0.95)',
+                        'box-shadow': '0 5px 20px rgba(0, 0, 0, 0.08)'
+                    });
+                }
+                
+                // Trigger animations on scroll
+                $('.fade-in, .zoom-in').each(function() {
+                    var elementTop = $(this).offset().top;
+                    var elementVisible = 150;
+                    
+                    if (scrollTop + winHeight > elementTop + elementVisible) {
+                        $(this).addClass('visible');
+                    }
+                });
+            });
+            
+            // Trigger initial animation check
+            $(window).trigger('scroll');
+            
+            // Counter animation for trust indicators
+            $('.counter').each(function() {
+                $(this).prop('Counter', 0).animate({
+                    Counter: $(this).data('count')
+                }, {
+                    duration: 2000,
+                    easing: 'swing',
+                    step: function(now) {
+                        if ($(this).data('count') > 100) {
+                            $(this).text(Math.ceil(now));
+                        } else {
+                            $(this).text(Math.ceil(now) + '+');
+                        }
+                    }
+                });
+            });
+            
+            // Typing effect simulation
+            let typingText = $('.typing-text');
+            let texts = [
+                "Flex Banner & Printing Solutions",
+                "UV Printing Services",
+                "Custom Branding Solutions",
+                "Poster & Banner Printing"
+            ];
+            let textIndex = 0;
+            let charIndex = 0;
+            let isDeleting = false;
+            let typingSpeed = 100;
+            
+            function typeEffect() {
+                let currentText = texts[textIndex];
+                
+                if (isDeleting) {
+                    typingText.text(currentText.substring(0, charIndex - 1));
+                    charIndex--;
+                    typingSpeed = 50;
+                } else {
+                    typingText.text(currentText.substring(0, charIndex + 1));
+                    charIndex++;
+                    typingSpeed = 100;
+                }
+                
+                if (!isDeleting && charIndex === currentText.length) {
+                    isDeleting = true;
+                    typingSpeed = 1000; // Pause at end
+                } else if (isDeleting && charIndex === 0) {
+                    isDeleting = false;
+                    textIndex = (textIndex + 1) % texts.length;
+                    typingSpeed = 500; // Pause before next word
+                }
+                
+                setTimeout(typeEffect, typingSpeed);
+            }
+            
+            // Start typing effect after page load
+            setTimeout(typeEffect, 1000);
+            
+            // Toggle particles
+            $('#toggleParticles').click(function() {
+                let particles = $('#particles-js');
+                if (particles.css('display') === 'none') {
+                    particles.show();
+                    particlesJS.resume();
+                } else {
+                    particles.hide();
+                    particlesJS.pause();
+                }
+            });
+            
+            // Change particles style
+            $('#changeParticles').click(function() {
+                particlesJS('particles-js', {
+                    particles: {
+                        number: { value: 60, density: { enable: true, value_area: 800 } },
+                        color: { value: ["#ffc107", "#ff6b35", "#0a2c5a"] },
+                        shape: { type: ["circle", "triangle", "edge"] },
+                        opacity: { value: 0.6, random: true },
+                        size: { value: 4, random: true },
+                        line_linked: {
+                            enable: true,
+                            distance: 120,
+                            color: "#ffc107",
+                            opacity: 0.4,
+                            width: 1
+                        },
+                        move: {
+                            enable: true,
+                            speed: 3,
+                            direction: "none",
+                            random: true,
+                            straight: false,
+                            out_mode: "out",
+                            bounce: false
+                        }
+                    },
+                    interactivity: {
+                        detect_on: "canvas",
+                        events: {
+                            onhover: { enable: true, mode: "bubble" },
+                            onclick: { enable: true, mode: "push" }
+                        }
+                    },
+                    retina_detect: true
+                });
+            });
+            
+            // Smooth scrolling for anchor links
+            $('a[href^="#"]').on('click', function(e) {
+                e.preventDefault();
+                
+                let target = this.hash;
+                let $target = $(target);
+                
+                $('html, body').stop().animate({
+                    'scrollTop': $target.offset().top - 80
+                }, 800, 'swing');
+            });
+            
+            // Add hover effect to service cards
+            $('.service-card').hover(
+                function() {
+                    $(this).find('.service-icon').css('transform', 'scale(1.1)');
+                },
+                function() {
+                    $(this).find('.service-icon').css('transform', 'scale(1)');
+                }
+            );
+            
+            // Form submission (example)
+            $('.contact-form').submit(function(e) {
+                e.preventDefault();
+                alert('Thank you for your enquiry! We will get back to you soon.');
+                $(this)[0].reset();
+            });
+        });
+    </script>
+</body>
+</html>

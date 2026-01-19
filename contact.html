@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us | ProPrint Solutions</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Montserrat:wght@400;500;600;700;800&display=swap">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+</head>
+<body>
+    <!-- Scroll Progress Bar -->
+    <div class="scroll-progress" id="scrollProgress"></div>
+    
+    <!-- Header & Navigation -->
+    <header id="mainHeader">
+        <div class="container header-container">
+            <a href="index.html" class="logo">
+                <i class="fas fa-print"></i> Pro<span>Print</span>
+            </a>
+            
+            <div class="mobile-toggle" id="mobileToggle">
+                <i class="fas fa-bars"></i>
+            </div>
+            
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="index.html" class="nav-link">Home</a></li>
+                <li><a href="index.html#why-us" class="nav-link">Why Choose Us</a></li>
+                <li><a href="service.html" class="nav-link">Services</a></li>
+                <li><a href="ourwork.html" class="nav-link">Our Work</a></li>
+                <li><a href="contact.html" class="nav-link active">Contact</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- Modern Contact Hero Section -->
+    <section class="contact-hero">
+        <div class="container">
+            <div class="contact-hero-content fade-in">
+                <h1>Get In Touch</h1>
+                <p class="contact-subtitle">Have a project in mind? We're here to help bring your vision to life. Contact us today for a free quote!</p>
+                <div class="contact-hero-stats">
+                    <div class="stat-item">
+                        <i class="fas fa-clock"></i>
+                        <span>Response within 24hrs</span>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Free Consultation</span>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fas fa-dollar-sign"></i>
+                        <span>Competitive Pricing</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="contact-hero-shapes">
+            <div class="shape shape-1"></div>
+            <div class="shape shape-2"></div>
+            <div class="shape shape-3"></div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="section-padding contact-section">
+        <div class="container">
+            <div class="contact-layout">
+                <!-- Contact Form -->
+                <div class="contact-form-wrapper fade-in">
+                    <div class="form-header">
+                        <h2><i class="fas fa-paper-plane"></i> Send Us a Message</h2>
+                        <p>Fill out the form below and we'll get back to you as soon as possible.</p>
+                    </div>
+                    <form class="modern-contact-form" id="contactForm">
+                        <div class="form-row">
+                            <div class="form-group modern-form-group">
+                                <label for="name">
+                                    <i class="fas fa-user"></i> Full Name *
+                                </label>
+                                <input type="text" id="name" name="name" required placeholder="Enter your full name">
+                                <span class="form-line"></span>
+                            </div>
+                            
+                            <div class="form-group modern-form-group">
+                                <label for="email">
+                                    <i class="fas fa-envelope"></i> Email Address *
+                                </label>
+                                <input type="email" id="email" name="email" required placeholder="your.email@example.com">
+                                <span class="form-line"></span>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group modern-form-group">
+                                <label for="phone">
+                                    <i class="fas fa-phone"></i> Phone Number
+                                </label>
+                                <input type="tel" id="phone" name="phone" placeholder="+1 (234) 567-8900">
+                                <span class="form-line"></span>
+                            </div>
+                            
+                            <div class="form-group modern-form-group">
+                                <label for="subject">
+                                    <i class="fas fa-tag"></i> Subject *
+                                </label>
+                                <input type="text" id="subject" name="subject" required placeholder="What is this regarding?">
+                                <span class="form-line"></span>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group modern-form-group">
+                            <label for="message">
+                                <i class="fas fa-comment-alt"></i> Message *
+                            </label>
+                            <textarea id="message" name="message" required placeholder="Tell us about your project..."></textarea>
+                            <span class="form-line"></span>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary modern-submit-btn">
+                            <span>Send Message</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Contact Info Cards -->
+                <div class="contact-info-wrapper">
+                    <div class="contact-info-card modern-card fade-in">
+                        <div class="card-icon-wrapper">
+                            <div class="card-icon">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </div>
+                        </div>
+                        <h3>Visit Us</h3>
+                        <p class="contact-detail">123 Printing Street<br>Business City, State 12345<br>United States</p>
+                        <a href="#" class="card-link">
+                            <i class="fas fa-directions"></i> Get Directions
+                        </a>
+                    </div>
+
+                    <div class="contact-info-card modern-card fade-in">
+                        <div class="card-icon-wrapper">
+                            <div class="card-icon">
+                                <i class="fas fa-phone"></i>
+                            </div>
+                        </div>
+                        <h3>Call Us</h3>
+                        <p class="contact-detail">+1 (234) 567-8900<br>+1 (234) 567-8901</p>
+                        <p class="contact-hours">Mon-Sat: 9:00 AM - 7:00 PM<br>Sunday: Closed</p>
+                        <a href="tel:+1234567890" class="card-link">
+                            <i class="fas fa-phone-alt"></i> Call Now
+                        </a>
+                    </div>
+
+                    <div class="contact-info-card modern-card fade-in">
+                        <div class="card-icon-wrapper">
+                            <div class="card-icon">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                        </div>
+                        <h3>Email Us</h3>
+                        <p class="contact-detail">info@proprintsolutions.com<br>support@proprintsolutions.com</p>
+                        <p class="contact-hours">We respond within 24 hours</p>
+                        <a href="mailto:info@proprintsolutions.com" class="card-link">
+                            <i class="fas fa-envelope-open"></i> Send Email
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Contact Actions -->
+            <div class="quick-contact-modern">
+                <div class="container">
+                    <h3>Prefer to reach us directly?</h3>
+                    <div class="quick-contact-btns-modern">
+                        <a href="tel:+1234567890" class="quick-action-btn">
+                            <div class="action-icon phone-icon">
+                                <i class="fas fa-phone-alt"></i>
+                            </div>
+                            <div class="action-content">
+                                <span class="action-label">Call Now</span>
+                                <span class="action-value">+1 (234) 567-8900</span>
+                            </div>
+                        </a>
+                        <a href="https://wa.me/1234567890" target="_blank" class="quick-action-btn">
+                            <div class="action-icon whatsapp-icon">
+                                <i class="fab fa-whatsapp"></i>
+                            </div>
+                            <div class="action-content">
+                                <span class="action-label">WhatsApp</span>
+                                <span class="action-value">Chat with us</span>
+                            </div>
+                        </a>
+                        <a href="mailto:info@proprintsolutions.com" class="quick-action-btn">
+                            <div class="action-icon email-icon">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <div class="action-content">
+                                <span class="action-label">Email</span>
+                                <span class="action-value">info@proprintsolutions.com</span>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h3>ProPrint Solutions</h3>
+                    <p>Your trusted partner for high-quality flex banner and printing solutions. We deliver professional results with fast turnaround times and competitive pricing.</p>
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-col">
+                    <h3>Quick Links</h3>
+                    <a href="index.html">Home</a>
+                    <a href="index.html#why-us">Why Choose Us</a>
+                    <a href="service.html">Services</a>
+                    <a href="ourwork.html">Our Work</a>
+                    <a href="contact.html">Contact</a>
+                </div>
+                
+                <div class="footer-col">
+                    <h3>Our Services</h3>
+                    <a href="service.html">Flex Banner Printing</a>
+                    <a href="service.html">Poster Printing</a>
+                    <a href="service.html">UV Printing</a>
+                    <a href="service.html">Vinyl & Flex Board</a>
+                    <a href="service.html">Medals & Trophies</a>
+                </div>
+                
+                <div class="footer-col">
+                    <h3>Contact Info</h3>
+                    <p><i class="fas fa-map-marker-alt"></i> 123 Printing Street, Business City</p>
+                    <p><i class="fas fa-phone"></i> +1 (234) 567-8900</p>
+                    <p><i class="fas fa-envelope"></i> info@proprintsolutions.com</p>
+                    <p><i class="fas fa-clock"></i> Mon-Sat: 9:00 AM - 7:00 PM</p>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2023 ProPrint Solutions. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- WhatsApp Floating Button -->
+    <a href="https://wa.me/1234567890" target="_blank" class="whatsapp-float">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <!-- JavaScript -->
+    <script src="js/main.js"></script>
+    <script src="js/contact.js"></script>
+</body>
+</html>
