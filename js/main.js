@@ -1,4 +1,19 @@
 // Main JavaScript - Shared functionality across all pages
+
+// Cart count utility - update on all pages
+function updateCartCountDisplay() {
+    const cartData = localStorage.getItem('proprintCart');
+    const cart = cartData ? JSON.parse(cartData) : [];
+    const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
+
+    document.querySelectorAll('.cart-count').forEach(el => {
+        el.textContent = totalItems;
+    });
+}
+
+// Update cart count immediately when DOM is ready
+document.addEventListener('DOMContentLoaded', updateCartCountDisplay);
+
 $(document).ready(function() {
     // Mobile navigation toggle
     $('#mobileToggle').click(function() {

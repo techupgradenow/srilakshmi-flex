@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Our Work | ProPrint Solutions</title>
+    <title>Your Cart | ProPrint Solutions</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Montserrat:wght@400;500;600;700;800&display=swap">
     <link rel="stylesheet" href="css/style.css">
@@ -12,23 +12,23 @@
 <body>
     <!-- Scroll Progress Bar -->
     <div class="scroll-progress" id="scrollProgress"></div>
-    
+
     <!-- Header & Navigation -->
     <header id="mainHeader">
         <div class="container header-container">
             <a href="index.html" class="logo">
                 <i class="fas fa-print"></i> Pro<span>Print</span>
             </a>
-            
+
             <div class="mobile-toggle" id="mobileToggle">
                 <i class="fas fa-bars"></i>
             </div>
-            
+
             <ul class="nav-menu" id="navMenu">
                 <li><a href="index.html" class="nav-link">Home</a></li>
                 <li><a href="index.html#why-us" class="nav-link">Why Choose Us</a></li>
                 <li><a href="service.html" class="nav-link">Services</a></li>
-                <li><a href="ourwork.html" class="nav-link active">Our Work</a></li>
+                <li><a href="ourwork.html" class="nav-link">Our Work</a></li>
                 <li><a href="products.php" class="nav-link">Products</a></li>
                 <li><a href="contact.html" class="nav-link">Contact</a></li>
             </ul>
@@ -40,102 +40,73 @@
         </div>
     </header>
 
-    <!-- Our Work Hero Section -->
-    <section class="hero" style="min-height: 60vh; padding: 10rem 0 4rem;">
+    <!-- Cart Hero Section -->
+    <section class="hero" style="min-height: 40vh; padding: 8rem 0 3rem;">
         <div class="container">
             <div class="hero-content">
-                <h1>Our Completed Projects</h1>
-                <p>A showcase of our recent work across different printing categories</p>
+                <h1>Your Cart</h1>
+                <p>Review your selected items and request a quote</p>
             </div>
         </div>
     </section>
 
-    <!-- Completed Projects Preview -->
-    <section class="section-padding projects" id="projects">
+    <!-- Cart Section -->
+    <section class="section-padding cart-section">
         <div class="container">
-            <h2 class="text-center fade-in">Portfolio Gallery</h2>
-            <p class="text-center fade-in">Explore our recent projects and see the quality of our work.</p>
-            
-            <div class="projects-grid">
-                <div class="project-item zoom-in">
-                    <img src="images/retail store banner.png" alt="Retail Store Banner" loading="lazy">
-                    <div class="project-overlay">
-                        <h3>Retail Store Banner</h3>
-                        <p>Large format flex banner for a retail store opening event.</p>
-                        <a href="contact.html" class="btn btn-primary">Order Similar</a>
-                    </div>
-                </div>
-                
-                <div class="project-item zoom-in">
-                    <img src="images/event poster image.png" alt="Event Poster" loading="lazy">
-                    <div class="project-overlay">
-                        <h3>Event Poster</h3>
-                        <p>Promotional poster for a music concert with vibrant colors.</p>
-                        <a href="contact.html" class="btn btn-primary">Order Similar</a>
-                    </div>
-                </div>
-                
-                <div class="project-item zoom-in">
-                    <img src="images/custom uv printing.png" alt="Custom UV Print" loading="lazy">
-                    <div class="project-overlay">
-                        <h3>Custom UV Print</h3>
-                        <p>UV printed acrylic sign for corporate office branding.</p>
-                        <a href="contact.html" class="btn btn-primary">Order Similar</a>
-                    </div>
-                </div>
-                
-                <div class="project-item zoom-in">
-                    <img src="images/outside banner image.png" alt="Outdoor Banner" loading="lazy">
-                    <div class="project-overlay">
-                        <h3>Outdoor Banner</h3>
-                        <p>Weather-resistant outdoor flex banner for marketing campaign.</p>
-                        <a href="contact.html" class="btn btn-primary">Order Similar</a>
-                    </div>
-                </div>
-                
-                <div class="project-item zoom-in">
-                    <img src="images/movie poster images.png" alt="Movie Poster" loading="lazy">
-                    <div class="project-overlay">
-                        <h3>Movie Poster</h3>
-                        <p>High-resolution movie poster with custom design elements.</p>
-                        <a href="contact.html" class="btn btn-primary">Order Similar</a>
-                    </div>
-                </div>
-                
-                <div class="project-item zoom-in">
-                    <img src="images/business signage images.png" alt="Business Signage" loading="lazy">
-                    <div class="project-overlay">
-                        <h3>Business Signage</h3>
-                        <p>Professional business signage with UV printing technology.</p>
-                        <a href="contact.html" class="btn btn-primary">Order Similar</a>
-                    </div>
+            <!-- Empty Cart Message -->
+            <div class="empty-cart" id="emptyCart" style="display: none;">
+                <div class="empty-cart-content">
+                    <i class="fas fa-shopping-cart"></i>
+                    <h2>Your Cart is Empty</h2>
+                    <p>Looks like you haven't added any items to your cart yet.</p>
+                    <a href="products.php" class="btn btn-primary">
+                        <i class="fas fa-arrow-left"></i> Browse Products
+                    </a>
                 </div>
             </div>
-        </div>
-    </section>
 
-    <!-- Trust Indicators -->
-    <section class="trust-indicators">
-        <div class="container">
-            <div class="indicators-grid">
-                <div class="indicator-item">
-                    <h3 class="counter" data-count="15">0</h3>
-                    <p>Years of Experience</p>
+            <!-- Cart Content -->
+            <div class="cart-content">
+                <div class="cart-items-wrapper">
+                    <div class="cart-header">
+                        <h2><i class="fas fa-shopping-bag"></i> Cart Items</h2>
+                        <button class="btn-clear-cart" id="clearCart">
+                            <i class="fas fa-trash"></i> Clear Cart
+                        </button>
+                    </div>
+
+                    <!-- Cart Items Container -->
+                    <div class="cart-items" id="cartItems">
+                        <!-- Items will be dynamically inserted here -->
+                    </div>
                 </div>
-                
-                <div class="indicator-item">
-                    <h3 class="counter" data-count="2500">0</h3>
-                    <p>Projects Completed</p>
-                </div>
-                
-                <div class="indicator-item">
-                    <h3 class="counter" data-count="98">0</h3>
-                    <p>Happy Customers (%)</p>
-                </div>
-                
-                <div class="indicator-item">
-                    <h3 class="counter" data-count="500">0</h3>
-                    <p>Repeat Clients</p>
+
+                <!-- Cart Summary -->
+                <div class="cart-summary" id="cartSummary">
+                    <div class="summary-card">
+                        <h3><i class="fas fa-receipt"></i> Order Summary</h3>
+                        <div class="summary-row">
+                            <span>Total Items:</span>
+                            <span id="totalItems">0 items</span>
+                        </div>
+                        <div class="summary-note">
+                            <i class="fas fa-info-circle"></i>
+                            <p>Pricing will be provided based on quantity, customization, and delivery requirements.</p>
+                        </div>
+                        <button class="btn btn-primary btn-full" id="proceedToQuote">
+                            <i class="fas fa-paper-plane"></i> Request Quote
+                        </button>
+                        <a href="products.php" class="btn btn-secondary btn-full">
+                            <i class="fas fa-plus"></i> Add More Items
+                        </a>
+                    </div>
+
+                    <!-- Contact Info -->
+                    <div class="summary-contact">
+                        <h4>Need Help?</h4>
+                        <p><i class="fas fa-phone"></i> +1 (234) 567-8900</p>
+                        <p><i class="fab fa-whatsapp"></i> WhatsApp Available</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -144,10 +115,10 @@
     <!-- Quick Contact Strip -->
     <section class="quick-contact">
         <div class="container">
-            <h3>Like what you see? Let's work together!</h3>
+            <h3>Have questions about your order?</h3>
             <div class="quick-contact-btns">
                 <a href="contact.html" class="btn btn-primary">
-                    <i class="fas fa-envelope"></i> Get Free Quote
+                    <i class="fas fa-envelope"></i> Contact Us
                 </a>
                 <a href="https://wa.me/1234567890" target="_blank" class="btn btn-secondary">
                     <i class="fab fa-whatsapp"></i> WhatsApp Us
@@ -170,7 +141,7 @@
                         <a href="#"><i class="fab fa-linkedin-in"></i></a>
                     </div>
                 </div>
-                
+
                 <div class="footer-col">
                     <h3>Quick Links</h3>
                     <a href="index.html">Home</a>
@@ -189,7 +160,7 @@
                     <a href="service.html">Vinyl & Flex Board</a>
                     <a href="products.php">Medals & Trophies</a>
                 </div>
-                
+
                 <div class="footer-col">
                     <h3>Contact Info</h3>
                     <p><i class="fas fa-map-marker-alt"></i> 123 Printing Street, Business City</p>
@@ -198,7 +169,7 @@
                     <p><i class="fas fa-clock"></i> Mon-Sat: 9:00 AM - 7:00 PM</p>
                 </div>
             </div>
-            
+
             <div class="footer-bottom">
                 <p>&copy; 2023 ProPrint Solutions. All Rights Reserved.</p>
             </div>
@@ -212,7 +183,6 @@
 
     <!-- JavaScript -->
     <script src="js/main.js"></script>
-    <script src="js/ourwork.js"></script>
+    <script src="js/cart.js"></script>
 </body>
 </html>
-
