@@ -52,6 +52,9 @@ $totalCategories = $conn->query("SELECT COUNT(*) FROM categories")->fetchColumn(
         <a href="index.php" class="nav-item active">
             <i class="fas fa-tachometer-alt"></i> Dashboard
         </a>
+        <a href="categories.php" class="nav-item">
+            <i class="fas fa-list"></i> Categories
+        </a>
         <a href="products.php" class="nav-item">
             <i class="fas fa-box"></i> Products
         </a>
@@ -80,6 +83,16 @@ $totalCategories = $conn->query("SELECT COUNT(*) FROM categories")->fetchColumn(
                     <span class="stat-value"><?php echo $activeProducts; ?></span>
                 </div>
             </div>
+
+            <div class="stat-card">
+                <div class="stat-icon" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                    <i class="fas fa-list"></i>
+                </div>
+                <div class="stat-content">
+                    <span class="stat-label">Categories</span>
+                    <span class="stat-value"><?php echo $totalCategories; ?></span>
+                </div>
+            </div>
         </div>
 
         <!-- Quick Links -->
@@ -89,6 +102,9 @@ $totalCategories = $conn->query("SELECT COUNT(*) FROM categories")->fetchColumn(
             </div>
             <div class="card-body">
                 <div class="quick-links">
+                    <a href="categories.php" class="btn btn-primary">
+                        <i class="fas fa-list"></i> Manage Categories
+                    </a>
                     <a href="products.php" class="btn btn-primary">
                         <i class="fas fa-box"></i> Manage Products
                     </a>

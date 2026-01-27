@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(xcopy:*)",
+      "Bash(powershell:*)",
+      "Bash(C:/xampp/mysql/bin/mysql.exe -u root -e \"CREATE DATABASE IF NOT EXISTS proprint_db;\")"
+    ],
+    "additionalDirectories": [
+      "C:\\xampp\\htdocs\\srilakshmi-flex\\admin"
+    ]
+  }
+}

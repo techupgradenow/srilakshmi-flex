@@ -43,31 +43,41 @@
 
     <!-- Hero Section -->
     <section class="hero" id="home">
-        <!-- Particles Background -->
-        <div id="particles-js"></div>
-        
-        <div class="container">
-            <div class="hero-content">
-                <h1>Professional <span class="typing-text">Flex Banner & Printing Solutions</span></h1>
-                <p>Premium Flex | UV Prints | Posters | Medals | Custom Branding for businesses of all sizes</p>
-                <div class="hero-btns">
-                    <a href="contact.html" class="btn btn-primary">Get Free Quote</a>
-                    <a href="https://wa.me/1234567890" target="_blank" class="btn btn-secondary">
-                        <i class="fab fa-whatsapp"></i> WhatsApp Now
-                    </a>
+        <div class="banner-slider">
+            <div class="slide active">
+                <img src="images/flex printing.jpeg" alt="High-Quality Printing Solutions">
+                <div class="slide-content">
+                    <h1>High-Quality<br><span class="highlight">Printing Solutions</span></h1>
+                    <a href="contact.html" class="slide-btn">Get Started</a>
                 </div>
             </div>
-        </div>
-        
-        <!-- Animated Background Shapes -->
-        <div class="animated-bg" style="top: 10%; left: 5%; font-size: 5rem; color: var(--secondary-color);">
-            <i class="fas fa-circle"></i>
-        </div>
-        <div class="animated-bg" style="top: 70%; right: 10%; font-size: 4rem; color: var(--accent-color); animation-delay: -5s;">
-            <i class="fas fa-square"></i>
-        </div>
-        <div class="animated-bg" style="top: 20%; right: 15%; font-size: 3rem; color: rgba(255,255,255,0.3); animation-delay: -10s;">
-            <i class="fas fa-triangle"></i>
+            <div class="slide">
+                <img src="images/custom branding.png" alt="Custom Branding for Your Business">
+                <div class="slide-content">
+                    <h1>Custom <span class="highlight">Branding</span><br>for Your Business</h1>
+                    <a href="service.html" class="slide-btn">Explore Services</a>
+                </div>
+            </div>
+            <div class="slide">
+                <img src="images/vinyl banner image.png" alt="Eye-Catching Outdoor Advertising">
+                <div class="slide-content">
+                    <h1>Eye-Catching<br><span class="highlight">Outdoor Advertising</span></h1>
+                    <a href="ourwork.html" class="slide-btn">Learn More</a>
+                </div>
+            </div>
+
+            <button class="slider-btn prev" aria-label="Previous slide">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <button class="slider-btn next" aria-label="Next slide">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+
+            <div class="slider-dots">
+                <span class="dot active" data-slide="0"></span>
+                <span class="dot" data-slide="1"></span>
+                <span class="dot" data-slide="2"></span>
+            </div>
         </div>
     </section>
 

@@ -30,7 +30,7 @@ if (!$product) {
 }
 
 // Get all categories
-$categories = $conn->query("SELECT * FROM categories WHERE status = 'active' ORDER BY name")->fetchAll();
+$categories = $conn->query("SELECT * FROM categories WHERE status = 'active' ORDER BY display_order ASC")->fetchAll();
 
 $error = '';
 
@@ -40,6 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $category_id = $_POST['category_id'] ?? null;
     $description = trim($_POST['description'] ?? '');
     $size = trim($_POST['size'] ?? '');
+    $price = trim($_POST['price'] ?? '0.00');
     $status = $_POST['status'] ?? 'active';
     $image_path = trim($_POST['image_path'] ?? '');
 
@@ -50,6 +51,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $error = 'Please select a category';
     } elseif (empty($description)) {
         $error = 'Product description is required';
+    } elseif (!is_numeric($price) || $price < 0) {
+        $error = 'Please enter a valid price';
     } else {
         $filename = $product['image']; // Keep existing image by default
 
@@ -95,11 +98,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (empty($error)) {
             $stmt = $conn->prepare("
                 UPDATE products
-                SET name = ?, category_id = ?, description = ?, image = ?, size = ?, status = ?
+                SET name = ?, category_id = ?, description = ?, image = ?, size = ?, price = ?, status = ?
                 WHERE id = ?
             ");
 
-            if ($stmt->execute([$name, $category_id, $description, $filename, $size, $status, $id])) {
+            if ($stmt->execute([$name, $category_id, $description, $filename, $size, $price, $status, $id])) {
                 header('Location: products.php?updated=1');
                 exit;
             } else {
@@ -229,6 +232,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <input type="text" id="size" name="size" class="form-control"
                                placeholder="10x12 inches"
                                value="<?php echo htmlspecialchars($product['size'] ?? ''); ?>">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="price">Price (₹) *</label>
+                        <input type="number" id="price" name="price" class="form-control"
+                               placeholder="Enter price" step="0.01" min="0" required
+                               value="<?php echo htmlspecialchars($product['price'] ?? '0.00'); ?>">
+                        <small class="form-hint">Enter product price in rupees (e.g., 499.00)</small>
                     </div>
 
                     <div class="form-group">

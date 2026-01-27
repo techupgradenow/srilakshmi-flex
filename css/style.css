@@ -348,21 +348,55 @@ header {
 
 .mobile-toggle {
     display: none;
-    font-size: 1.8rem;
     cursor: pointer;
-    color: var(--primary-color);
-    background: var(--secondary-color);
+    background: linear-gradient(135deg, var(--secondary-color), #ffb300);
     width: 50px;
     height: 50px;
-    border-radius: 50%;
+    border-radius: 12px;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 5px 15px rgba(255, 193, 7, 0.3);
-    transition: var(--transition);
+    box-shadow: 0 5px 15px rgba(255, 193, 7, 0.4), 0 0 0 0 rgba(255, 193, 7, 0.4);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: visible;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    animation: menuPulse 2s infinite;
+}
+
+@keyframes menuPulse {
+    0%, 100% {
+        box-shadow: 0 5px 15px rgba(255, 193, 7, 0.4), 0 0 0 0 rgba(255, 193, 7, 0.4);
+    }
+    50% {
+        box-shadow: 0 5px 15px rgba(255, 193, 7, 0.4), 0 0 0 10px rgba(255, 193, 7, 0);
+    }
 }
 
 .mobile-toggle:hover {
-    transform: rotate(90deg);
+    transform: scale(1.1);
+    box-shadow: 0 8px 25px rgba(255, 193, 7, 0.6);
+    animation: none;
+}
+
+.mobile-toggle:active {
+    transform: scale(0.95);
+}
+
+/* Animated Hamburger Icon */
+.mobile-toggle i {
+    font-size: 1.5rem;
+    color: var(--primary-color);
+    transition: all 0.3s ease;
+}
+
+.mobile-toggle.active {
+    background: linear-gradient(135deg, #ff6b35, #ff3d00);
+    border-color: rgba(255, 255, 255, 0.3);
+    animation: none;
+}
+
+.mobile-toggle.active i::before {
+    content: '\f00d';
 }
 
 /* Cart Icon */
@@ -407,82 +441,168 @@ header {
 
 /* Hero Section with Particles */
 .hero {
-    background-color: var(--primary-color);
-    color: var(--white);
-    padding: 12rem 0 8rem;
-    margin-top: 80px;
+    margin-top: 0;
+    padding-top: 80px;
     position: relative;
     overflow: hidden;
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
+    width: 100%;
+    height: 100vh;
+    min-height: 600px;
+    background: transparent;
 }
 
-#particles-js {
+.banner-slider {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.slide {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: 0;
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.hero-content {
-    position: relative;
+.slide.active {
+    opacity: 1;
     z-index: 1;
-    max-width: 800px;
-    animation: fadeInUp 1s ease-out;
 }
 
-@keyframes fadeInUp {
+.slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+}
+
+.slide-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    z-index: 5;
+    max-width: 90%;
+    animation: slideIn 0.8s ease-out;
+}
+
+@keyframes slideIn {
     from {
         opacity: 0;
-        transform: translateY(50px);
+        transform: translate(-50%, -40%);
     }
     to {
         opacity: 1;
-        transform: translateY(0);
+        transform: translate(-50%, -50%);
     }
 }
 
-.hero h1 {
-    font-size: 4rem;
-    margin-bottom: 1.5rem;
-    animation: fadeInUp 1s 0.2s both;
+.slide-content h1 {
+    font-size: clamp(2.5rem, 6vw, 5rem);
+    color: var(--white);
+    margin-bottom: 2rem;
+    text-shadow: 2px 4px 10px rgba(0, 0, 0, 0.5);
+    line-height: 1.2;
+    font-weight: 800;
 }
 
-.hero p {
-    font-size: 1.3rem;
-    margin-bottom: 2.5rem;
-    color: rgba(255, 255, 255, 0.85);
-    animation: fadeInUp 1s 0.4s both;
-}
-
-.hero-btns {
-    display: flex;
-    gap: 1.5rem;
-    flex-wrap: wrap;
-    animation: fadeInUp 1s 0.6s both;
-}
-
-/* Animated Typing Effect */
-.typing-text {
-    position: relative;
+.slide-content .highlight {
+    color: var(--secondary-color);
     display: inline-block;
 }
 
-.typing-text:after {
-    content: '|';
-    position: absolute;
-    right: -8px;
-    bottom: 0;
-    animation: blink 1s infinite;
-    color: var(--secondary-color);
+.slide-btn {
+    display: inline-block;
+    padding: 1.2rem 3rem;
+    background: var(--secondary-color);
+    color: var(--primary-color);
+    font-size: 1.2rem;
+    font-weight: 700;
+    text-decoration: none;
+    border-radius: 50px;
+    transition: all 0.3s ease;
+    box-shadow: 0 8px 20px rgba(255, 193, 7, 0.4);
+    text-transform: capitalize;
 }
 
-@keyframes blink {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0; }
+.slide-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 30px rgba(255, 193, 7, 0.6);
+    background: #ffb300;
+}
+
+.slider-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255, 255, 255, 0.9);
+    border: none;
+    color: var(--primary-color);
+    font-size: 1.5rem;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 10;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.slider-btn:hover {
+    background: var(--secondary-color);
+    color: var(--primary-color);
+    transform: translateY(-50%) scale(1.1);
+}
+
+.slider-btn.prev {
+    left: 20px;
+}
+
+.slider-btn.next {
+    right: 20px;
+}
+
+.slider-dots {
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 12px;
+    z-index: 10;
+}
+
+.dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.6);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+}
+
+.dot:hover {
+    background: rgba(255, 255, 255, 0.9);
+    transform: scale(1.2);
+}
+
+.dot.active {
+    background: var(--secondary-color);
+    border-color: var(--white);
+    width: 14px;
+    height: 14px;
 }
 
 /* Why Choose Us Section */
@@ -1591,13 +1711,10 @@ footer .container {
     h1 { 
         font-size: clamp(2.5rem, 5vw, 3rem); 
     }
-    h2 { 
-        font-size: clamp(2rem, 4vw, 2.4rem); 
+    h2 {
+        font-size: clamp(2rem, 4vw, 2.4rem);
     }
-    .hero h1 { 
-        font-size: clamp(2.8rem, 6vw, 3.2rem); 
-    }
-    
+
     .services-grid,
     .features-grid {
         grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -1618,15 +1735,13 @@ footer .container {
         font-size: clamp(1.9rem, 4vw, 2.2rem); 
     }
     
-    .hero { 
-        padding: clamp(8rem, 15vw, 10rem) 0 clamp(5rem, 10vw, 6rem);
-        min-height: auto;
+    .hero {
+        margin-top: 0;
+        padding-top: 80px;
+        height: 80vh;
+        min-height: 500px;
     }
-    
-    .hero h1 { 
-        font-size: clamp(2.4rem, 6vw, 2.8rem); 
-    }
-    
+
     .section-padding { 
         padding: clamp(3rem, 8vw, 4rem) 0; 
     }
@@ -1903,103 +2018,51 @@ footer .container {
         transform: translateX(-50%) scaleX(0);
     }
     
-    /* Premium Mobile Hero Section */
+    /* Mobile Hero Section */
     .hero {
-        padding: clamp(8rem, 15vw, 10rem) 0 clamp(5rem, 10vw, 6rem);
-        margin-top: 70px;
-        position: relative;
-        overflow: hidden;
-        background: linear-gradient(135deg, var(--primary-color) 0%, #08306b 50%, var(--primary-color) 100%);
-        background-size: 200% 200%;
-        animation: gradientShift 15s ease infinite;
+        margin-top: 0;
+        padding-top: 70px;
+        height: 70vh;
+        min-height: 450px;
     }
-    
-    @keyframes gradientShift {
-        0%, 100% { background-position: 0% 50%; }
-        50% { background-position: 100% 50%; }
+
+    .slider-btn {
+        width: 40px;
+        height: 40px;
+        font-size: 1.2rem;
     }
-    
-    .hero::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: 
-            radial-gradient(circle at 20% 30%, rgba(255, 193, 7, 0.15) 0%, transparent 50%),
-            radial-gradient(circle at 80% 70%, rgba(255, 107, 53, 0.1) 0%, transparent 50%);
-        pointer-events: none;
-        z-index: 0;
+
+    .slider-btn.prev {
+        left: 10px;
     }
-    
-    .hero .container {
-        position: relative;
-        z-index: 1;
+
+    .slider-btn.next {
+        right: 10px;
     }
-    
-    .hero h1 { 
-        font-size: clamp(2.2rem, 8vw, 2.8rem);
+
+    .slider-dots {
+        bottom: 20px;
+        gap: 8px;
+    }
+
+    .dot {
+        width: 10px;
+        height: 10px;
+    }
+
+    .dot.active {
+        width: 12px;
+        height: 12px;
+    }
+
+    .slide-content h1 {
+        font-size: clamp(2rem, 7vw, 3rem);
         margin-bottom: 1.5rem;
-        text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-        line-height: 1.2;
     }
-    
-    .hero p {
-        font-size: clamp(1.1rem, 3.5vw, 1.3rem);
-        margin-bottom: 2.5rem;
-        text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-        line-height: 1.6;
-    }
-    
-    .hero-btns {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 1.2rem;
-        width: 100%;
-    }
-    
-    .hero-btns .btn {
-        width: 100%;
-        text-align: center;
-        padding: 1.3rem 2rem;
-        font-size: 1.05rem;
-        font-weight: 700;
-        margin-bottom: 0;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-        position: relative;
-        overflow: hidden;
-        border: 2px solid transparent;
-    }
-    
-    .hero-btns .btn-primary {
-        background: linear-gradient(135deg, var(--secondary-color), #ffb300);
-        border-color: rgba(255, 255, 255, 0.3);
-    }
-    
-    .hero-btns .btn-secondary {
-        background: rgba(255, 255, 255, 0.15);
-        backdrop-filter: blur(10px);
-        border-color: rgba(255, 255, 255, 0.3);
-        color: var(--white);
-    }
-    
-    .hero-btns .btn::before {
-        content: '';
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        width: 0;
-        height: 0;
-        border-radius: 50%;
-        background: rgba(255, 255, 255, 0.3);
-        transform: translate(-50%, -50%);
-        transition: width 0.6s ease, height 0.6s ease;
-    }
-    
-    .hero-btns .btn:active::before {
-        width: 400px;
-        height: 400px;
+
+    .slide-btn {
+        padding: 1rem 2rem;
+        font-size: 1rem;
     }
     
     .container {
@@ -2490,14 +2553,50 @@ footer .container {
         width: 80px !important;
     }
     
-    .hero h1 { 
-        font-size: clamp(1.8rem, 8vw, 2rem);
+    .hero {
+        height: 60vh;
+        min-height: 400px;
     }
-    
-    .hero p {
-        font-size: clamp(0.95rem, 3.5vw, 1.1rem);
+
+    .slider-btn {
+        width: 35px;
+        height: 35px;
+        font-size: 1rem;
     }
-    
+
+    .slider-btn.prev {
+        left: 8px;
+    }
+
+    .slider-btn.next {
+        right: 8px;
+    }
+
+    .slider-dots {
+        bottom: 15px;
+        gap: 6px;
+    }
+
+    .dot {
+        width: 8px;
+        height: 8px;
+    }
+
+    .dot.active {
+        width: 10px;
+        height: 10px;
+    }
+
+    .slide-content h1 {
+        font-size: clamp(1.8rem, 8vw, 2.5rem);
+        margin-bottom: 1.2rem;
+    }
+
+    .slide-btn {
+        padding: 0.9rem 1.8rem;
+        font-size: 0.95rem;
+    }
+
     .container {
         padding: 0 1rem;
     }
@@ -2794,7 +2893,7 @@ footer .container {
     
     .medals-gallery {
         grid-template-columns: 1fr;
-        gap: 1.5rem;
+        gap: 1rem;
     }
 
     .medal-preview {
@@ -3038,10 +3137,10 @@ footer .container {
 /* Landscape Orientation Adjustments */
 @media (max-height: 500px) and (orientation: landscape) {
     .hero {
-        min-height: auto;
-        padding: 5rem 0 3rem;
+        height: 100vh;
+        min-height: 400px;
     }
-    
+
     .nav-menu {
         max-height: calc(100vh - 70px);
         overflow-y: auto;
@@ -3348,38 +3447,120 @@ img {
     margin: 0;
 }
 
-/* Medals Gallery */
+/* Product Grid View System */
+/* Grid Container with Enhanced Styling */
 .medals-gallery {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    gap: 2rem;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 1.25rem;
     margin-bottom: 3rem;
+    position: relative;
+}
+
+/* Grid Loading Animation */
+.medals-gallery.loading {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+.medals-gallery.loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 50px;
+    height: 50px;
+    border: 4px solid var(--light-gray);
+    border-top-color: var(--secondary-color);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    transform: translate(-50%, -50%);
+}
+
+@keyframes spin {
+    to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+/* Grid Item Fade In Animation */
+.medal-design-card.fade-in {
+    animation: fadeInUp 0.6s ease forwards;
+}
+
+.medal-design-card.fade-in:nth-child(1) { animation-delay: 0.1s; }
+.medal-design-card.fade-in:nth-child(2) { animation-delay: 0.15s; }
+.medal-design-card.fade-in:nth-child(3) { animation-delay: 0.2s; }
+.medal-design-card.fade-in:nth-child(4) { animation-delay: 0.25s; }
+.medal-design-card.fade-in:nth-child(5) { animation-delay: 0.3s; }
+.medal-design-card.fade-in:nth-child(n+6) { animation-delay: 0.35s; }
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .medal-design-card {
     background: var(--white);
-    border-radius: 16px;
+    border-radius: 12px;
     overflow: hidden;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-    transition: var(--transition);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     display: flex;
     flex-direction: column;
     border: 1px solid rgba(10, 44, 90, 0.08);
+    position: relative;
+}
+
+.medal-design-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s ease;
+}
+
+.medal-design-card:hover::before {
+    transform: scaleX(1);
 }
 
 .medal-design-card:hover {
     transform: translateY(-8px);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+    box-shadow: 0 20px 40px rgba(10, 44, 90, 0.15);
+    border-color: var(--secondary-color);
 }
 
 .medal-preview {
-    padding: 1rem;
+    padding: 0.75rem;
     display: flex;
     justify-content: center;
     align-items: center;
     position: relative;
-    height: 220px;
+    height: 170px;
     background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    overflow: hidden;
+}
+
+.medal-preview::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(10, 44, 90, 0.05), transparent);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.medal-design-card:hover .medal-preview::after {
+    opacity: 1;
 }
 
 .medal-preview img {
@@ -3387,11 +3568,13 @@ img {
     height: 100%;
     object-fit: contain;
     object-position: center;
-    transition: transform 0.3s ease;
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    z-index: 1;
 }
 
 .medal-design-card:hover .medal-preview img {
-    transform: scale(1.05);
+    transform: scale(1.08);
 }
 
 .medal-front {
@@ -3545,24 +3728,110 @@ img {
 }
 
 .medal-info {
-    padding: 1.25rem 1.5rem 1.5rem;
+    padding: 1rem 1.25rem 1.25rem;
     display: flex;
     flex-direction: column;
     flex-grow: 1;
+    position: relative;
 }
 
 .medal-info h3 {
-    font-size: 1.15rem;
-    margin-bottom: 0.5rem;
+    font-size: 1rem;
+    margin-bottom: 0.4rem;
     color: var(--primary-color);
     line-height: 1.3;
+    font-weight: 600;
+    transition: color 0.3s ease;
+}
+
+.medal-design-card:hover .medal-info h3 {
+    color: var(--secondary-color);
 }
 
 .medal-info p {
     color: var(--gray-color);
-    margin-bottom: 0.75rem;
+    margin-bottom: 0.65rem;
     line-height: 1.5;
-    font-size: 0.85rem;
+    font-size: 0.8rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Product Grid Enhancements */
+.product-category-badge {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    background: linear-gradient(135deg, var(--primary-color), rgba(10, 44, 90, 0.9));
+    color: var(--white);
+    padding: 0.35rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.65rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    z-index: 2;
+    box-shadow: 0 4px 12px rgba(10, 44, 90, 0.3);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.product-size-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.75rem;
+    color: var(--gray-color);
+    background: var(--light-gray);
+    padding: 0.25rem 0.6rem;
+    border-radius: 6px;
+    margin-top: 0.5rem;
+}
+
+.product-size-tag i {
+    font-size: 0.7rem;
+    color: var(--secondary-color);
+}
+
+.product-grid-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(to top, rgba(10, 44, 90, 0.9), transparent);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding: 1rem;
+    z-index: 3;
+}
+
+.medal-design-card:hover .product-grid-overlay {
+    opacity: 1;
+}
+
+.product-quick-info {
+    transform: translateY(20px);
+    transition: transform 0.3s ease;
+    color: var(--white);
+    text-align: center;
+    width: 100%;
+}
+
+.medal-design-card:hover .product-quick-info {
+    transform: translateY(0);
+}
+
+.product-quick-info p {
+    color: rgba(255, 255, 255, 0.95);
+    font-size: 0.75rem;
+    margin: 0;
 }
 
 .medal-features {
@@ -3639,6 +3908,19 @@ img {
     font-size: 0.95rem;
     margin: 0;
     line-height: 1.6;
+}
+
+/* Medals Gallery Responsive */
+@media (max-width: 991px) {
+    .medals-gallery {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 767px) {
+    .medals-gallery {
+        grid-template-columns: repeat(2, 1fr);
+    }
 }
 
 /* ========================================

@@ -1,6 +1,6 @@
 <?php
 /**
- * Add Product Page
+ * Add Category Page
  * Sri Lakshmi Admin Panel
  */
 
@@ -11,77 +11,73 @@ require_once __DIR__ . '/../config/database.php';
 
 $conn = getConnection();
 
-// Get all categories
-$categories = $conn->query("SELECT * FROM categories WHERE status = 'active' ORDER BY display_order ASC")->fetchAll();
-
 $error = '';
 $success = '';
 
 // Handle form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $name = trim($_POST['name'] ?? '');
-    $category_id = $_POST['category_id'] ?? null;
-    $description = trim($_POST['description'] ?? '');
-    $size = trim($_POST['size'] ?? '');
-    $price = trim($_POST['price'] ?? '0.00');
     $status = $_POST['status'] ?? 'active';
     $image_path = trim($_POST['image_path'] ?? '');
 
     // Validate required fields
     if (empty($name)) {
-        $error = 'Product name is required';
-    } elseif (empty($category_id)) {
-        $error = 'Please select a category';
-    } elseif (empty($description)) {
-        $error = 'Product description is required';
-    } elseif (!is_numeric($price) || $price < 0) {
-        $error = 'Please enter a valid price';
+        $error = 'Category name is required';
     } else {
-        $filename = '';
+        // Check if category already exists
+        $stmt = $conn->prepare("SELECT id FROM categories WHERE name = ?");
+        $stmt->execute([$name]);
 
-        // Check if file was uploaded
-        if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
-            $file = $_FILES['image'];
-            $allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
-            $maxSize = 5 * 1024 * 1024; // 5MB
+        if ($stmt->fetch()) {
+            $error = 'A category with this name already exists';
+        } else {
+            $filename = '';
 
-            if (!in_array($file['type'], $allowedTypes)) {
-                $error = 'Invalid file type. Only JPG, PNG, GIF, WEBP allowed';
-            } elseif ($file['size'] > $maxSize) {
-                $error = 'File too large. Maximum size is 5MB';
-            } else {
-                // Create uploads directory if not exists
-                $uploadDir = __DIR__ . '/../uploads/products/';
-                if (!file_exists($uploadDir)) {
-                    mkdir($uploadDir, 0755, true);
+            // Check if file was uploaded
+            if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
+                $file = $_FILES['image'];
+                $allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+                $maxSize = 5 * 1024 * 1024; // 5MB
+
+                if (!in_array($file['type'], $allowedTypes)) {
+                    $error = 'Invalid file type. Only JPG, PNG, GIF, WEBP allowed';
+                } elseif ($file['size'] > $maxSize) {
+                    $error = 'File too large. Maximum size is 5MB';
+                } else {
+                    // Create uploads directory if not exists
+                    $uploadDir = __DIR__ . '/../uploads/categories/';
+                    if (!file_exists($uploadDir)) {
+                        mkdir($uploadDir, 0755, true);
+                    }
+
+                    // Generate unique filename
+                    $extension = pathinfo($file['name'], PATHINFO_EXTENSION);
+                    $filename = time() . '_' . uniqid() . '.' . $extension;
+                    $filepath = $uploadDir . $filename;
+
+                    if (!move_uploaded_file($file['tmp_name'], $filepath)) {
+                        $error = 'Failed to upload image';
+                    }
                 }
-
-                // Generate unique filename
-                $extension = pathinfo($file['name'], PATHINFO_EXTENSION);
-                $filename = time() . '_' . uniqid() . '.' . $extension;
-                $filepath = $uploadDir . $filename;
-
-                if (!move_uploaded_file($file['tmp_name'], $filepath)) {
-                    $error = 'Failed to upload image';
-                }
+            } elseif (!empty($image_path)) {
+                // Use manual image path
+                $filename = $image_path;
             }
-        } elseif (!empty($image_path)) {
-            // Use manual image path
-            $filename = $image_path;
-        }
 
-        // Insert product if no error
-        if (empty($error)) {
-            $stmt = $conn->prepare("
-                INSERT INTO products (name, category_id, description, image, size, price, status)
-                VALUES (?, ?, ?, ?, ?, ?, ?)
-            ");
+            // Insert category if no error
+            if (empty($error)) {
+                // Get the next display order (max + 1)
+                $maxOrder = $conn->query("SELECT COALESCE(MAX(display_order), 0) FROM categories")->fetchColumn();
+                $displayOrder = $maxOrder + 1;
 
-            if ($stmt->execute([$name, $category_id, $description, $filename, $size, $price, $status])) {
-                header('Location: products.php?added=1');
-                exit;
-            } else {
-                $error = 'Failed to add product';
+                $stmt = $conn->prepare("INSERT INTO categories (name, image, status, display_order) VALUES (?, ?, ?, ?)");
+
+                if ($stmt->execute([$name, $filename, $status, $displayOrder])) {
+                    header('Location: categories.php?added=1');
+                    exit;
+                } else {
+                    $error = 'Failed to add category';
+                }
             }
         }
     }
@@ -92,7 +88,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Product | Sri Lakshmi Admin</title>
+    <title>Add Category | Sri Lakshmi Admin</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/admin.css">
@@ -101,7 +97,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <!-- Header -->
     <header class="admin-header">
         <div class="header-left">
-            <h1 class="admin-title">Add Product</h1>
+            <h1 class="admin-title">Add Category</h1>
         </div>
         <div class="header-right">
             <a href="../index.html" target="_blank" class="btn btn-outline">
@@ -118,10 +114,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <a href="index.php" class="nav-item">
             <i class="fas fa-tachometer-alt"></i> Dashboard
         </a>
-        <a href="categories.php" class="nav-item">
+        <a href="categories.php" class="nav-item active">
             <i class="fas fa-list"></i> Categories
         </a>
-        <a href="products.php" class="nav-item active">
+        <a href="products.php" class="nav-item">
             <i class="fas fa-box"></i> Products
         </a>
     </nav>
@@ -135,46 +131,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
         <?php endif; ?>
 
-        <!-- Add Product Card -->
+        <!-- Add Category Card -->
         <div class="card">
             <div class="card-header">
-                <h2><i class="fas fa-plus-circle"></i> Product Information</h2>
+                <h2><i class="fas fa-plus-circle"></i> Category Information</h2>
             </div>
             <div class="card-body">
                 <form method="POST" enctype="multipart/form-data" class="product-form">
                     <div class="form-group">
-                        <label for="name">Product Name *</label>
+                        <label for="name">Category Name *</label>
                         <input type="text" id="name" name="name" class="form-control"
-                               placeholder="Enter product name" required
+                               placeholder="Enter category name (e.g., Wedding Cards, Flex Banners)" required
                                value="<?php echo htmlspecialchars($_POST['name'] ?? ''); ?>">
                     </div>
 
                     <div class="form-group">
-                        <label for="category_id">Category *</label>
-                        <select id="category_id" name="category_id" class="form-control" required>
-                            <option value="">Select Category</option>
-                            <?php foreach ($categories as $cat): ?>
-                                <option value="<?php echo $cat['id']; ?>"
-                                    <?php echo (isset($_POST['category_id']) && $_POST['category_id'] == $cat['id']) ? 'selected' : ''; ?>>
-                                    <?php echo htmlspecialchars($cat['name']); ?>
-                                </option>
-                            <?php endforeach; ?>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="description">Description *</label>
-                        <textarea id="description" name="description" class="form-control" rows="4"
-                                  placeholder="Enter product description" required><?php echo htmlspecialchars($_POST['description'] ?? ''); ?></textarea>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="image">Product Image *</label>
+                        <label for="image">Category Image</label>
                         <div class="file-upload-wrapper">
                             <input type="file" id="image" name="image" accept="image/*">
                             <div class="file-upload-box" id="dropZone">
                                 <i class="fas fa-cloud-upload-alt"></i>
-                                <span>Upload Image</span>
+                                <span>Upload Category Image</span>
                                 <small>Click to browse or drag and drop</small>
                                 <small>JPG, PNG, GIF, WEBP (Max 5MB)</small>
                             </div>
@@ -188,24 +165,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                     <div class="form-group">
                         <input type="text" id="image_path" name="image_path" class="form-control"
-                               placeholder="images/product-name.jpg"
+                               placeholder="images/category-name.jpg"
                                value="<?php echo htmlspecialchars($_POST['image_path'] ?? ''); ?>">
-                        <small class="form-hint">Enter relative path from frontend folder (e.g., images/product-name.jpg)</small>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="size">Size (Optional)</label>
-                        <input type="text" id="size" name="size" class="form-control"
-                               placeholder="10x12 inches"
-                               value="<?php echo htmlspecialchars($_POST['size'] ?? ''); ?>">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="price">Price (₹) *</label>
-                        <input type="number" id="price" name="price" class="form-control"
-                               placeholder="Enter price" step="0.01" min="0" required
-                               value="<?php echo htmlspecialchars($_POST['price'] ?? ''); ?>">
-                        <small class="form-hint">Enter product price in rupees (e.g., 499.00)</small>
+                        <small class="form-hint">Enter relative path from frontend folder (e.g., images/category-name.jpg)</small>
                     </div>
 
                     <div class="form-group">
@@ -214,13 +176,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <option value="active" <?php echo (!isset($_POST['status']) || $_POST['status'] === 'active') ? 'selected' : ''; ?>>Active</option>
                             <option value="inactive" <?php echo (isset($_POST['status']) && $_POST['status'] === 'inactive') ? 'selected' : ''; ?>>Inactive</option>
                         </select>
+                        <small class="form-hint">Inactive categories won't be shown in product dropdown</small>
                     </div>
 
                     <div class="form-actions">
                         <button type="submit" class="btn btn-primary">
-                            <i class="fas fa-save"></i> Add Product
+                            <i class="fas fa-save"></i> Add Category
                         </button>
-                        <a href="products.php" class="btn btn-secondary">
+                        <a href="categories.php" class="btn btn-secondary">
                             <i class="fas fa-times"></i> Cancel
                         </a>
                     </div>
