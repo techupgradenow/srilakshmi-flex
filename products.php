@@ -114,8 +114,8 @@ if (isset($productsByCategory['Other Products']) && empty($productsByCategory['O
             <!-- Categories Browse -->
             <div class="categories-showcase-inline" style="margin-top: 3rem;">
                 <!-- All Products Button -->
-                <div style="text-align: center; margin-bottom: 2rem;">
-                    <button class="category-filter-btn active" data-category="all" style="background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); color: white; border: none; padding: 0.75rem 2rem; border-radius: 50px; font-size: 1rem; font-weight: 600; cursor: pointer; box-shadow: 0 4px 15px rgba(10, 44, 90, 0.3); transition: all 0.3s ease;">
+                <div class="all-products-wrapper" style="text-align: center; margin-bottom: 2rem;">
+                    <button class="category-filter-btn all-products-btn" data-category="all" style="background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); color: white; border: none; padding: 0.75rem 2rem; border-radius: 50px; font-size: 1rem; font-weight: 600; cursor: pointer; box-shadow: 0 4px 15px rgba(10, 44, 90, 0.3); transition: all 0.3s ease;">
                         <i class="fas fa-th"></i> All Products
                     </button>
                 </div>
@@ -176,6 +176,12 @@ if (isset($productsByCategory['Other Products']) && empty($productsByCategory['O
     <!-- Products Section -->
     <section style="padding: 3rem 0 4rem; background: linear-gradient(to bottom, var(--white), var(--light-gray));">
         <div class="container">
+            <!-- Back to Categories Button (Mobile Only) -->
+            <div class="back-to-categories-wrapper" style="display: none; margin-bottom: 1.5rem;">
+                <button class="back-to-categories-btn" onclick="backToCategories()">
+                    <i class="fas fa-arrow-left"></i> Back to Categories
+                </button>
+            </div>
             <?php
             // Flatten all products from all categories into one array
             $allProducts = [];
@@ -223,12 +229,15 @@ if (isset($productsByCategory['Other Products']) && empty($productsByCategory['O
                             <?php if (isset($product['price']) && $product['price'] > 0): ?>
                                 <p class="product-price"><i class="fas fa-tag"></i> ₹<?php echo number_format($product['price'], 2); ?></p>
                             <?php endif; ?>
-                            <button class="btn btn-primary add-to-cart-btn"
-                                    data-id="product-<?php echo $product['id']; ?>"
+                            <button class="btn btn-primary view-product-btn"
+                                    data-id="<?php echo $product['id']; ?>"
                                     data-name="<?php echo htmlspecialchars($product['name']); ?>"
+                                    data-price="<?php echo $product['price'] ?? 0; ?>"
+                                    data-size="<?php echo htmlspecialchars($product['size'] ?? ''); ?>"
+                                    data-description="<?php echo htmlspecialchars($product['description']); ?>"
                                     data-image="<?php echo htmlspecialchars($imagePath); ?>"
                                     data-category="<?php echo htmlspecialchars($product['category_display']); ?>">
-                                <i class="fas fa-shopping-cart"></i> Order Now
+                                <i class="fas fa-eye"></i> View Details
                             </button>
                         </div>
                     </div>
@@ -312,6 +321,38 @@ if (isset($productsByCategory['Other Products']) && empty($productsByCategory['O
         <i class="fab fa-whatsapp"></i>
     </a>
 
+    <!-- Product Details Modal -->
+    <div id="productModal" class="product-modal">
+        <div class="modal-overlay" onclick="closeProductModal()"></div>
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeProductModal()">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="modal-body">
+                <div class="modal-image">
+                    <img id="modalProductImage" src="" alt="">
+                </div>
+                <div class="modal-info">
+                    <h2 id="modalProductName"></h2>
+                    <p class="modal-category">
+                        <i class="fas fa-tag"></i> <span id="modalProductCategory"></span>
+                    </p>
+                    <p class="modal-description" id="modalProductDescription"></p>
+                    <p class="modal-size" id="modalProductSize"></p>
+                    <p class="modal-price" id="modalProductPrice"></p>
+                    <div class="modal-actions">
+                        <button class="btn btn-primary" id="modalAddToCart">
+                            <i class="fas fa-shopping-cart"></i> Add to Cart
+                        </button>
+                        <button class="btn btn-secondary" onclick="closeProductModal()">
+                            <i class="fas fa-times"></i> Close
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- JavaScript -->
     <script src="js/main.js"></script>
     <script src="js/cart.js"></script>
@@ -345,6 +386,7 @@ if (isset($productsByCategory['Other Products']) && empty($productsByCategory['O
         gap: 1.5rem;
         position: relative;
         z-index: 1;
+        align-items: stretch;
     }
 
     .category-card {
@@ -361,6 +403,9 @@ if (isset($productsByCategory['Other Products']) && empty($productsByCategory['O
         box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
         position: relative;
         overflow: hidden;
+        min-height: 120px;
+        height: 100%;
+        box-sizing: border-box;
     }
 
     .category-card::before {
@@ -427,6 +472,10 @@ if (isset($productsByCategory['Other Products']) && empty($productsByCategory['O
         flex: 1;
         position: relative;
         z-index: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        min-height: 70px;
     }
 
     .category-info h3 {
@@ -436,6 +485,8 @@ if (isset($productsByCategory['Other Products']) && empty($productsByCategory['O
         margin: 0 0 0.5rem 0;
         transition: color 0.4s ease;
         line-height: 1.3;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
     }
 
     .category-card:hover .category-info h3 {
@@ -483,64 +534,235 @@ if (isset($productsByCategory['Other Products']) && empty($productsByCategory['O
         color: var(--primary-color);
     }
 
-    /* Responsive */
+    /* Responsive - Mobile First */
     @media (max-width: 768px) {
-        .categories-grid {
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1rem;
+        /* Enable vertical scroll, prevent horizontal overflow */
+        body {
+            overflow-x: hidden !important;
+            overflow-y: auto !important;
+            position: static !important;
+            height: auto !important;
+            min-height: 100vh !important;
         }
 
+        .container {
+            padding-left: 1rem !important;
+            padding-right: 1rem !important;
+            max-width: 100% !important;
+            overflow-x: hidden !important;
+        }
+
+        /* Hero section must not restrict height */
+        .hero {
+            min-height: auto !important;
+            height: auto !important;
+            padding: 6rem 0 2rem !important;
+        }
+
+        .categories-showcase-inline {
+            width: 100% !important;
+            overflow: visible !important;
+            margin-left: 0 !important;
+            margin-right: 0 !important;
+            height: auto !important;
+            max-height: none !important;
+            min-height: auto !important;
+            padding-bottom: 4rem !important;
+            position: static !important;
+        }
+
+        /* VERTICAL LIST VIEW - Replace grid with flex column */
+        .categories-grid {
+            display: flex !important;
+            flex-direction: column !important;
+            gap: 0.75rem !important;
+            width: 100% !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            box-sizing: border-box !important;
+            height: auto !important;
+            max-height: none !important;
+            overflow: visible !important;
+        }
+
+        /* Category cards as horizontal list items */
         .category-card {
             display: flex !important;
-            padding: 1.25rem 0.75rem !important;
-            flex-direction: column !important;
+            flex-direction: row !important;
             align-items: center !important;
-            justify-content: space-between !important;
-            text-align: center !important;
-            min-height: 200px !important;
-            gap: 0.75rem !important;
+            justify-content: flex-start !important;
+            text-align: left !important;
+            padding: 1rem !important;
+            min-height: 60px !important;
+            height: auto !important;
+            max-height: none !important;
+            gap: 1rem !important;
+            width: 100% !important;
+            box-sizing: border-box !important;
+            border-radius: 12px !important;
+            overflow: visible !important;
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%) !important;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08) !important;
+            transition: all 0.2s ease !important;
         }
 
+        .category-card:active {
+            transform: scale(0.98) !important;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12) !important;
+        }
+
+        .category-card::before {
+            display: none !important;
+        }
+
+        /* Icon on the left */
         .category-icon {
             width: 50px !important;
             height: 50px !important;
+            min-width: 50px !important;
+            min-height: 50px !important;
             margin: 0 !important;
             flex-shrink: 0 !important;
+            border-radius: 50% !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            background: linear-gradient(135deg, var(--secondary-color) 0%, #ffda44 100%) !important;
+            box-shadow: 0 2px 8px rgba(255, 193, 7, 0.3) !important;
         }
 
         .category-icon i {
             font-size: 1.4rem !important;
+            color: var(--primary-color) !important;
         }
 
+        .category-icon img {
+            width: 100% !important;
+            height: 100% !important;
+            object-fit: cover !important;
+            border-radius: 50% !important;
+        }
+
+        /* Category info in the middle - takes available space */
         .category-info {
             margin: 0 !important;
+            padding: 0 !important;
             flex: 1 !important;
             display: flex !important;
             flex-direction: column !important;
+            align-items: flex-start !important;
             justify-content: center !important;
-            width: 100% !important;
+            width: auto !important;
+            max-width: none !important;
+            overflow: visible !important;
         }
 
         .category-info h3 {
-            font-size: 0.85rem !important;
-            line-height: 1.2 !important;
-            margin: 0 0 0.35rem 0 !important;
+            font-size: 0.95rem !important;
+            line-height: 1.3 !important;
+            margin: 0 0 0.2rem 0 !important;
+            padding: 0 !important;
+            word-wrap: break-word !important;
+            overflow-wrap: break-word !important;
+            text-align: left !important;
+            width: 100% !important;
+            color: var(--primary-color) !important;
+            font-weight: 600 !important;
         }
 
         .category-count {
-            font-size: 0.7rem !important;
+            font-size: 0.75rem !important;
             margin: 0 !important;
+            padding: 0 !important;
+            color: #666 !important;
+            font-weight: 500 !important;
         }
 
+        /* Arrow on the right */
         .category-arrow {
             margin: 0 !important;
             width: 32px !important;
             height: 32px !important;
+            min-width: 32px !important;
+            min-height: 32px !important;
             flex-shrink: 0 !important;
+            border-radius: 50% !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            background: rgba(10, 40, 84, 0.08) !important;
         }
 
         .category-arrow i {
-            font-size: 0.85rem !important;
+            font-size: 0.9rem !important;
+            color: var(--primary-color) !important;
+        }
+
+        /* Disable hover effects on mobile */
+        .category-card:hover {
+            transform: none !important;
+        }
+
+        .category-card:hover .category-icon {
+            transform: none !important;
+        }
+
+        /* Mobile All Products Button - Hidden on mobile */
+        .all-products-wrapper {
+            display: none !important;
+        }
+
+        .all-products-btn {
+            width: 100% !important;
+            max-width: 100% !important;
+            padding: 0.85rem 1.5rem !important;
+            font-size: 0.9rem !important;
+            border-radius: 12px !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            gap: 0.5rem !important;
+        }
+
+        .all-products-btn.active {
+            background: linear-gradient(135deg, var(--secondary-color), #ffda44) !important;
+            box-shadow: 0 6px 20px rgba(255, 193, 7, 0.4) !important;
+        }
+
+        /* Back to Categories Button */
+        .back-to-categories-wrapper {
+            display: none !important;
+        }
+
+        .back-to-categories-wrapper.show {
+            display: block !important;
+        }
+
+        .back-to-categories-btn {
+            width: 100% !important;
+            padding: 0.85rem 1.5rem !important;
+            background: linear-gradient(135deg, var(--primary-color), #1a3a6e) !important;
+            color: white !important;
+            border: none !important;
+            border-radius: 12px !important;
+            font-size: 0.9rem !important;
+            font-weight: 600 !important;
+            cursor: pointer !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            gap: 0.5rem !important;
+            box-shadow: 0 4px 15px rgba(10, 44, 90, 0.3) !important;
+            transition: all 0.3s ease !important;
+        }
+
+        .back-to-categories-btn:active {
+            transform: scale(0.98) !important;
+        }
+
+        /* Hide categories when products are shown */
+        .categories-showcase-inline.hide-on-mobile {
+            display: none !important;
         }
     }
 
@@ -610,8 +832,175 @@ if (isset($productsByCategory['Other Products']) && empty($productsByCategory['O
         transform: translateY(-5px);
     }
 
-    /* Mobile: Hide products initially until category is selected */
+    /* Product Modal Styles */
+    .product-modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 9999;
+        animation: fadeIn 0.3s ease;
+    }
+
+    .product-modal.active {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .modal-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.7);
+        backdrop-filter: blur(5px);
+    }
+
+    .modal-content {
+        position: relative;
+        background: white;
+        border-radius: 20px;
+        max-width: 900px;
+        width: 90%;
+        max-height: 90vh;
+        overflow-y: auto;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        animation: slideUp 0.3s ease;
+        z-index: 10000;
+    }
+
+    .modal-close {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        width: 40px;
+        height: 40px;
+        border: none;
+        background: rgba(0, 0, 0, 0.1);
+        border-radius: 50%;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+        z-index: 10001;
+    }
+
+    .modal-close:hover {
+        background: var(--primary-color);
+        color: white;
+        transform: rotate(90deg);
+    }
+
+    .modal-body {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
+        padding: 2rem;
+    }
+
+    .modal-image {
+        border-radius: 15px;
+        overflow: hidden;
+        background: #f5f5f5;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .modal-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .modal-info h2 {
+        font-size: 1.8rem;
+        color: var(--primary-color);
+        margin-bottom: 1rem;
+    }
+
+    .modal-category {
+        display: inline-block;
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        color: white;
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        margin-bottom: 1rem;
+    }
+
+    .modal-description {
+        color: #666;
+        line-height: 1.6;
+        margin: 1rem 0;
+    }
+
+    .modal-size {
+        color: var(--primary-color);
+        font-weight: 600;
+        margin: 0.5rem 0;
+    }
+
+    .modal-price {
+        font-size: 2rem;
+        color: var(--secondary-color);
+        font-weight: 800;
+        margin: 1rem 0;
+    }
+
+    .modal-actions {
+        display: flex;
+        gap: 1rem;
+        margin-top: 2rem;
+    }
+
+    .modal-actions .btn {
+        flex: 1;
+        padding: 1rem;
+        font-size: 1rem;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+    @keyframes slideUp {
+        from {
+            opacity: 0;
+            transform: translateY(50px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Mobile Modal Styles */
     @media (max-width: 768px) {
+        .modal-body {
+            grid-template-columns: 1fr;
+            padding: 1.5rem;
+        }
+
+        .modal-info h2 {
+            font-size: 1.4rem;
+        }
+
+        .modal-price {
+            font-size: 1.5rem;
+        }
+
+        .modal-actions {
+            flex-direction: column;
+        }
+
+        /* Products shown on desktop, hidden on mobile until category selected */
         .medals-gallery {
             display: none;
         }
@@ -619,15 +1008,312 @@ if (isset($productsByCategory['Other Products']) && empty($productsByCategory['O
         .medals-gallery.show-products {
             display: grid;
         }
+    }
 
-        /* Hide "All Products" button on mobile */
-        .category-filter-btn[data-category="all"] {
-            display: none;
+    /* Desktop: Always show products */
+    @media (min-width: 769px) {
+        .medals-gallery {
+            display: grid !important;
         }
+    }
+
+    /* Cart Toast Notification */
+    .cart-toast {
+        position: fixed;
+        bottom: 2rem;
+        right: 2rem;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        padding: 1.25rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1.5rem;
+        min-width: 320px;
+        max-width: 420px;
+        z-index: 10000;
+        transform: translateY(150%);
+        opacity: 0;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        border-left: 4px solid #28a745;
+    }
+
+    .cart-toast.show {
+        transform: translateY(0);
+        opacity: 1;
+    }
+
+    .cart-toast-content {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        flex: 1;
+    }
+
+    .cart-toast-content i {
+        font-size: 1.5rem;
+        color: #28a745;
+        flex-shrink: 0;
+    }
+
+    .cart-toast-text {
+        flex: 1;
+    }
+
+    .cart-toast-text strong {
+        display: block;
+        color: var(--primary-color);
+        font-size: 0.95rem;
+        margin-bottom: 0.25rem;
+        font-weight: 600;
+    }
+
+    .cart-toast-text p {
+        margin: 0;
+        color: #666;
+        font-size: 0.85rem;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .cart-toast-link {
+        padding: 0.6rem 1.2rem;
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        color: white;
+        text-decoration: none;
+        border-radius: 8px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        white-space: nowrap;
+        transition: all 0.3s ease;
+    }
+
+    .cart-toast-link:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(10, 44, 90, 0.3);
+    }
+
+    /* Cart count animation */
+    .cart-count-updated {
+        animation: cartBounce 0.5s ease;
+    }
+
+    @keyframes cartBounce {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.3); }
+    }
+
+    /* Mobile responsive toast */
+    @media (max-width: 768px) {
+        .cart-toast {
+            bottom: 1rem;
+            right: 1rem;
+            left: 1rem;
+            min-width: auto;
+            max-width: none;
+        }
+
+        .cart-toast-text p {
+            white-space: normal;
+            overflow: visible;
+            text-overflow: clip;
+        }
+    }
+
+    /* Add to cart button success state */
+    .added-to-cart {
+        background: #28a745 !important;
+        border-color: #28a745 !important;
     }
     </style>
 
     <script>
+    // Product Modal Functions
+    function openProductModal(productData) {
+        const modal = document.getElementById('productModal');
+        document.getElementById('modalProductImage').src = productData.image;
+        document.getElementById('modalProductName').textContent = productData.name;
+        document.getElementById('modalProductCategory').textContent = productData.category;
+        document.getElementById('modalProductDescription').textContent = productData.description;
+
+        const sizeEl = document.getElementById('modalProductSize');
+        if (productData.size) {
+            sizeEl.innerHTML = '<i class="fas fa-ruler"></i> Size: ' + productData.size;
+            sizeEl.style.display = 'block';
+        } else {
+            sizeEl.style.display = 'none';
+        }
+
+        const priceEl = document.getElementById('modalProductPrice');
+        if (productData.price > 0) {
+            priceEl.innerHTML = '<i class="fas fa-tag"></i> ₹' + parseFloat(productData.price).toFixed(2);
+            priceEl.style.display = 'block';
+        } else {
+            priceEl.style.display = 'none';
+        }
+
+        // Setup add to cart button
+        const addToCartBtn = document.getElementById('modalAddToCart');
+        addToCartBtn.setAttribute('data-id', 'product-' + productData.id);
+        addToCartBtn.setAttribute('data-name', productData.name);
+        addToCartBtn.setAttribute('data-image', productData.image);
+        addToCartBtn.setAttribute('data-category', productData.category);
+        addToCartBtn.className = 'btn btn-primary add-to-cart-btn';
+
+        // Remove any existing click handlers to prevent duplicates
+        addToCartBtn.replaceWith(addToCartBtn.cloneNode(true));
+        const freshBtn = document.getElementById('modalAddToCart');
+        freshBtn.className = 'btn btn-primary add-to-cart-btn';
+        freshBtn.setAttribute('data-id', 'product-' + productData.id);
+        freshBtn.setAttribute('data-name', productData.name);
+        freshBtn.setAttribute('data-image', productData.image);
+        freshBtn.setAttribute('data-category', productData.category);
+
+        // Add direct click handler for modal button (in addition to event delegation)
+        freshBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            console.log('Modal Add to Cart clicked!', {
+                id: freshBtn.dataset.id,
+                name: freshBtn.dataset.name,
+                image: freshBtn.dataset.image,
+                category: freshBtn.dataset.category
+            });
+
+            // Trigger cart addition using the global Cart object
+            if (window.ProPrintCart) {
+                const product = {
+                    id: freshBtn.dataset.id,
+                    name: freshBtn.dataset.name,
+                    image: freshBtn.dataset.image,
+                    category: freshBtn.dataset.category
+                };
+
+                window.ProPrintCart.addItem(product);
+                console.log('Product added to cart via direct handler');
+                console.log('Cart now has', window.ProPrintCart.getTotalItems(), 'items');
+
+                // Show button feedback
+                const originalText = freshBtn.innerHTML;
+                freshBtn.innerHTML = '<i class="fas fa-check"></i> Added!';
+                freshBtn.classList.add('added-to-cart');
+                freshBtn.disabled = true;
+
+                setTimeout(() => {
+                    freshBtn.innerHTML = originalText;
+                    freshBtn.classList.remove('added-to-cart');
+                    freshBtn.disabled = false;
+                }, 1500);
+
+                // Show toast notification
+                const existingToast = document.querySelector('.cart-toast');
+                if (existingToast) {
+                    existingToast.remove();
+                }
+
+                const toast = document.createElement('div');
+                toast.className = 'cart-toast';
+                toast.innerHTML = `
+                    <div class="cart-toast-content">
+                        <i class="fas fa-check-circle"></i>
+                        <div class="cart-toast-text">
+                            <strong>Added to Cart!</strong>
+                            <p>${product.name}</p>
+                        </div>
+                    </div>
+                    <a href="cart.html" class="cart-toast-link">View Cart</a>
+                `;
+
+                document.body.appendChild(toast);
+
+                setTimeout(() => {
+                    toast.classList.add('show');
+                }, 10);
+
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                    setTimeout(() => {
+                        toast.remove();
+                    }, 300);
+                }, 4000);
+            } else {
+                console.error('ProPrintCart not found! Cart.js may not be loaded.');
+            }
+        });
+
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeProductModal() {
+        const modal = document.getElementById('productModal');
+        modal.classList.remove('active');
+        document.body.style.overflow = 'auto';
+    }
+
+    // Back to Categories Function
+    function backToCategories() {
+        const isMobile = window.innerWidth <= 768;
+        if (!isMobile) return;
+
+        const categoriesSection = document.querySelector('.categories-showcase-inline');
+        const productsGallery = document.querySelector('.medals-gallery');
+        const backButton = document.querySelector('.back-to-categories-wrapper');
+        const categoriesGrid = document.querySelector('.categories-grid');
+
+        // CRITICAL: Reset body scroll first
+        document.body.style.overflow = 'auto';
+        document.body.style.position = 'static';
+        document.body.style.height = 'auto';
+
+        // Show categories and reset all layout styles
+        if (categoriesSection) {
+            categoriesSection.classList.remove('hide-on-mobile');
+            // Force reset inline styles
+            categoriesSection.style.height = 'auto';
+            categoriesSection.style.maxHeight = 'none';
+            categoriesSection.style.overflow = 'visible';
+            categoriesSection.style.transform = 'none';
+            categoriesSection.style.position = 'static';
+        }
+
+        // Reset category grid styles
+        if (categoriesGrid) {
+            categoriesGrid.style.display = 'flex';
+            categoriesGrid.style.flexDirection = 'column';
+            categoriesGrid.style.height = 'auto';
+            categoriesGrid.style.maxHeight = 'none';
+            categoriesGrid.style.overflow = 'visible';
+        }
+
+        // Hide products
+        if (productsGallery) {
+            productsGallery.classList.remove('show-products');
+        }
+
+        // Hide back button
+        if (backButton) {
+            backButton.classList.remove('show');
+        }
+
+        // Remove all active states
+        document.querySelectorAll('.category-filter-btn').forEach(btn => {
+            btn.classList.remove('active');
+        });
+
+        // Clear session storage
+        sessionStorage.removeItem('selectedCategory');
+
+        // Force reflow to ensure DOM updates
+        if (categoriesSection) {
+            void categoriesSection.offsetHeight;
+        }
+
+        // Scroll to top smoothly
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
     // Category Filtering JavaScript
     document.addEventListener('DOMContentLoaded', function() {
         const categoryButtons = document.querySelectorAll('.category-filter-btn');
@@ -637,10 +1323,30 @@ if (isset($productsByCategory['Other Products']) && empty($productsByCategory['O
         const isMobile = () => window.innerWidth <= 768;
 
         // Function to filter products
-        function filterProducts(categoryId) {
-            // On mobile, show the products section when a category is clicked
-            if (isMobile() && productsGallery) {
-                productsGallery.classList.add('show-products');
+        function filterProducts(categoryId, saveToSession = true) {
+            const categoriesSection = document.querySelector('.categories-showcase-inline');
+            const backButton = document.querySelector('.back-to-categories-wrapper');
+
+            // Save selected category to sessionStorage
+            if (saveToSession) {
+                sessionStorage.setItem('selectedCategory', categoryId);
+            }
+
+            // On mobile, show products and hide categories
+            if (isMobile()) {
+                if (productsGallery) {
+                    productsGallery.classList.add('show-products');
+                }
+
+                // Hide categories section
+                if (categoriesSection) {
+                    categoriesSection.classList.add('hide-on-mobile');
+                }
+
+                // Show back button
+                if (backButton) {
+                    backButton.classList.add('show');
+                }
             }
 
             productItems.forEach(product => {
@@ -658,8 +1364,8 @@ if (isset($productsByCategory['Other Products']) && empty($productsByCategory['O
                 }
             });
 
-            // Scroll to products section smoothly
-            if (productsGallery) {
+            // Scroll to products section smoothly on mobile
+            if (productsGallery && isMobile()) {
                 setTimeout(() => {
                     productsGallery.scrollIntoView({ behavior: 'smooth', block: 'start' });
                 }, 100);
@@ -682,22 +1388,89 @@ if (isset($productsByCategory['Other Products']) && empty($productsByCategory['O
             });
         });
 
-        // Set initial state
-        // Desktop: show all products
-        // Mobile: hide products until category is selected
-        if (!isMobile()) {
-            if (allProductsBtn) {
-                allProductsBtn.classList.add('active');
+        // Initial state setup
+        if (isMobile()) {
+            // Mobile: Always show categories first, hide products
+            const categoriesSection = document.querySelector('.categories-showcase-inline');
+            const backButton = document.querySelector('.back-to-categories-wrapper');
+
+            // Ensure categories are visible
+            if (categoriesSection) {
+                categoriesSection.classList.remove('hide-on-mobile');
             }
+
+            // Hide products gallery
             if (productsGallery) {
-                productsGallery.classList.add('show-products');
+                productsGallery.classList.remove('show-products');
+            }
+
+            // Hide back button
+            if (backButton) {
+                backButton.classList.remove('show');
+            }
+
+            // Clear saved category on mobile
+            sessionStorage.removeItem('selectedCategory');
+        } else {
+            // Desktop: Restore previous selection or show all
+            const savedCategory = sessionStorage.getItem('selectedCategory');
+
+            if (savedCategory && savedCategory !== 'all') {
+                const savedButton = document.querySelector('[data-category="' + savedCategory + '"]');
+                if (savedButton) {
+                    categoryButtons.forEach(btn => btn.classList.remove('active'));
+                    savedButton.classList.add('active');
+                    filterProducts(savedCategory, false);
+                }
+            } else {
+                if (allProductsBtn) {
+                    allProductsBtn.classList.add('active');
+                }
+                if (productsGallery) {
+                    productsGallery.classList.add('show-products');
+                }
             }
         }
 
+        // View Product Button Handlers
+        document.querySelectorAll('.view-product-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const productData = {
+                    id: this.getAttribute('data-id'),
+                    name: this.getAttribute('data-name'),
+                    price: this.getAttribute('data-price'),
+                    size: this.getAttribute('data-size'),
+                    description: this.getAttribute('data-description'),
+                    image: this.getAttribute('data-image'),
+                    category: this.getAttribute('data-category')
+                };
+                openProductModal(productData);
+            });
+        });
+
+        // Close modal on escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeProductModal();
+            }
+        });
+
         // Handle window resize
         window.addEventListener('resize', function() {
-            if (!isMobile() && productsGallery) {
-                productsGallery.classList.add('show-products');
+            const categoriesSection = document.querySelector('.categories-showcase-inline');
+            const backButton = document.querySelector('.back-to-categories-wrapper');
+
+            if (!isMobile()) {
+                // Desktop: Show all content
+                if (productsGallery) {
+                    productsGallery.classList.add('show-products');
+                }
+                if (categoriesSection) {
+                    categoriesSection.classList.remove('hide-on-mobile');
+                }
+                if (backButton) {
+                    backButton.classList.remove('show');
+                }
                 if (allProductsBtn && !document.querySelector('.category-filter-btn.active')) {
                     allProductsBtn.classList.add('active');
                 }
