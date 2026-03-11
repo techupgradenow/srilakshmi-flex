@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /cart.html
+
+Sitemap: https://srilakshmiads.in/sitemap.xml
+
+# Srilakshmi Ads - Flex Printing & Advertising in Kovilpatti
+# Website: https://srilakshmiads.in
+# Phone: +91 8489831211
