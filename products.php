@@ -914,8 +914,8 @@ if (isset($productsByCategory['Other Products']) && empty($productsByCategory['O
 
     .modal-image img {
         width: 100%;
-        height: 100%;
-        object-fit: cover;
+        height: auto;
+        object-fit: contain;
     }
 
     .modal-info h2 {
@@ -927,7 +927,7 @@ if (isset($productsByCategory['Other Products']) && empty($productsByCategory['O
     .modal-category {
         display: inline-block;
         background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-        color: white;
+        color: #ffffff;
         padding: 0.5rem 1rem;
         border-radius: 20px;
         font-size: 0.85rem;
