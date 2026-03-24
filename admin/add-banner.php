@@ -15,17 +15,27 @@ require_once __DIR__ . '/../config/database.php';
 
 $conn = getConnection();
 
-// Check if banners table exists, create if needed
-$tableExists = false;
+// Check if banners table exists, create or repair if needed
 try {
     $check = $conn->query("SHOW TABLES LIKE 'banners'")->fetch();
     if ($check) {
-        $tableExists = true;
-    }
-} catch (Exception $e) {}
-
-if (!$tableExists) {
-    try {
+        // Auto-repair: add missing columns
+        $cols = $conn->query("SHOW COLUMNS FROM banners")->fetchAll(PDO::FETCH_COLUMN);
+        $fixes = [
+            'title'       => "ALTER TABLE `banners` ADD COLUMN `title` varchar(255) DEFAULT NULL",
+            'subtitle'    => "ALTER TABLE `banners` ADD COLUMN `subtitle` varchar(500) DEFAULT NULL",
+            'button_text' => "ALTER TABLE `banners` ADD COLUMN `button_text` varchar(100) DEFAULT 'Learn More'",
+            'button_link' => "ALTER TABLE `banners` ADD COLUMN `button_link` varchar(255) DEFAULT '#'",
+            'status'      => "ALTER TABLE `banners` ADD COLUMN `status` enum('active','inactive') DEFAULT 'active'",
+            'sort_order'  => "ALTER TABLE `banners` ADD COLUMN `sort_order` int(11) DEFAULT 0",
+            'created_at'  => "ALTER TABLE `banners` ADD COLUMN `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP",
+        ];
+        foreach ($fixes as $col => $sql) {
+            if (!in_array($col, $cols)) {
+                try { $conn->exec($sql); } catch (Exception $e) {}
+            }
+        }
+    } else {
         $conn->exec("CREATE TABLE IF NOT EXISTS `banners` (
             `id` int(11) NOT NULL AUTO_INCREMENT,
             `image` varchar(255) NOT NULL,
@@ -38,9 +48,8 @@ if (!$tableExists) {
             `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
             PRIMARY KEY (`id`)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci");
-        $tableExists = true;
-    } catch (Exception $e) {}
-}
+    }
+} catch (Exception $e) {}
 
 $error = '';
 

@@ -12,7 +12,7 @@ require_once __DIR__ . '/../config/database.php';
 try {
     $conn = getConnection();
 
-    // Check if banners table exists, try to create if not
+    // Check if banners table exists, create or repair if needed
     $check = $conn->query("SHOW TABLES LIKE 'banners'")->fetch();
     if (!$check) {
         try {
@@ -29,9 +29,24 @@ try {
                 PRIMARY KEY (`id`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci");
         } catch (Exception $e) {
-            // Can't create table, return empty
             echo json_encode(['success' => true, 'banners' => []]);
             exit;
+        }
+    } else {
+        // Auto-repair: add missing columns
+        $cols = $conn->query("SHOW COLUMNS FROM banners")->fetchAll(PDO::FETCH_COLUMN);
+        $fixes = [
+            'title'       => "ALTER TABLE `banners` ADD COLUMN `title` varchar(255) DEFAULT NULL",
+            'subtitle'    => "ALTER TABLE `banners` ADD COLUMN `subtitle` varchar(500) DEFAULT NULL",
+            'button_text' => "ALTER TABLE `banners` ADD COLUMN `button_text` varchar(100) DEFAULT 'Learn More'",
+            'button_link' => "ALTER TABLE `banners` ADD COLUMN `button_link` varchar(255) DEFAULT '#'",
+            'status'      => "ALTER TABLE `banners` ADD COLUMN `status` enum('active','inactive') DEFAULT 'active'",
+            'sort_order'  => "ALTER TABLE `banners` ADD COLUMN `sort_order` int(11) DEFAULT 0",
+        ];
+        foreach ($fixes as $col => $sql) {
+            if (!in_array($col, $cols)) {
+                try { $conn->exec($sql); } catch (Exception $e) {}
+            }
         }
     }
 
