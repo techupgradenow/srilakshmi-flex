@@ -80,7 +80,7 @@ if (isset($productsByCategory['Other Products']) && empty($productsByCategory['O
     <header id="mainHeader">
         <div class="container header-container">
             <a href="index.html" class="logo">
-                <i class="fas fa-shopping-bag"></i> Sri<span>Lakshmi</span>
+                <img src="images/Sri Lakshmi Print Logo new Black.png" alt="Sri Lakshmi Print Logo" style="height: 40px; width: auto;">
             </a>
 
             <div class="mobile-toggle" id="mobileToggle">
@@ -104,15 +104,26 @@ if (isset($productsByCategory['Other Products']) && empty($productsByCategory['O
     </header>
 
     <!-- Products Hero Section -->
-    <section class="hero" style="min-height: auto; padding: 10rem 0 3rem;">
+    <section class="contact-hero">
         <div class="container">
-            <div class="hero-content">
+            <div class="contact-hero-content fade-in">
                 <h1>Our Products</h1>
-                <p>Explore our premium collection of thamboolam bags, wedding cards, and custom designs</p>
+                <p class="contact-subtitle">Explore our premium collection of thamboolam bags, wedding cards, and custom designs</p>
             </div>
+        </div>
+        <div class="contact-hero-shapes">
+            <div class="shape shape-1"></div>
+            <div class="shape shape-2"></div>
+            <div class="shape shape-3"></div>
+        </div>
+    </section>
+
+    <!-- Products Filter & Grid -->
+    <section class="products-filter-section">
+        <div class="container">
 
             <!-- Categories Browse -->
-            <div class="categories-showcase-inline" style="margin-top: 3rem;">
+            <div class="categories-showcase-inline">
                 <!-- All Products Button -->
                 <div class="all-products-wrapper" style="text-align: center; margin-bottom: 2rem;">
                     <button class="category-filter-btn all-products-btn" data-category="all" style="background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); color: white; border: none; padding: 0.75rem 2rem; border-radius: 50px; font-size: 1rem; font-weight: 600; cursor: pointer; box-shadow: 0 4px 15px rgba(10, 44, 90, 0.3); transition: all 0.3s ease;">
@@ -174,7 +185,7 @@ if (isset($productsByCategory['Other Products']) && empty($productsByCategory['O
     </section>
 
     <!-- Products Section -->
-    <section style="padding: 3rem 0 4rem; background: linear-gradient(to bottom, var(--white), var(--light-gray));">
+    <section class="products-grid-section">
         <div class="container">
             <!-- Back to Categories Button (Mobile Only) -->
             <div class="back-to-categories-wrapper" style="display: none; margin-bottom: 1.5rem;">
@@ -261,7 +272,7 @@ if (isset($productsByCategory['Other Products']) && empty($productsByCategory['O
                 <a href="contact.html" class="btn btn-primary">
                     <i class="fas fa-envelope"></i> Get Free Quote
                 </a>
-                <a href="https://wa.me/1234567890" target="_blank" class="btn btn-secondary">
+                <a href="https://wa.me/918489831211" target="_blank" class="btn btn-whatsapp">
                     <i class="fab fa-whatsapp"></i> WhatsApp Us
                 </a>
             </div>
@@ -273,53 +284,62 @@ if (isset($productsByCategory['Other Products']) && empty($productsByCategory['O
         <div class="container">
             <div class="footer-grid">
                 <div class="footer-col">
-                    <h3>Sri Lakshmi</h3>
-                    <p>Your trusted partner for high-quality thamboolam bags, wedding cards, and printing solutions. We deliver professional results with fast turnaround times.</p>
+                    <h3><span class="footer-icon" style="background:#ffc107;color:#0a2c5a;"><i class="fas fa-link"></i></span> Quick Links</h3>
+                    <a href="index.html"><i class="fas fa-chevron-right"></i> Home</a>
+                    <a href="index.html#why-us"><i class="fas fa-chevron-right"></i> Why Choose Us</a>
+                    <a href="service.html"><i class="fas fa-chevron-right"></i> Services</a>
+                    <a href="ourwork.html"><i class="fas fa-chevron-right"></i> Our Work</a>
+                    <a href="products.php"><i class="fas fa-chevron-right"></i> Products</a>
+                    <a href="contact.html"><i class="fas fa-chevron-right"></i> Contact</a>
+                </div>
+
+                <div class="footer-col">
+                    <h3><span class="footer-icon" style="background:#ffc107;color:#0a2c5a;"><i class="fas fa-cog"></i></span> Our Services</h3>
+                    <a href="service.html"><i class="fas fa-chevron-right"></i> Flex Banner Printing</a>
+                    <a href="service.html"><i class="fas fa-chevron-right"></i> Poster Printing</a>
+                    <a href="service.html"><i class="fas fa-chevron-right"></i> UV Printing</a>
+                    <a href="service.html"><i class="fas fa-chevron-right"></i> Vinyl & Flex Board</a>
+                    <a href="products.php"><i class="fas fa-chevron-right"></i> Medals & Trophies</a>
+                </div>
+
+                <div class="footer-col">
+                    <h3><span class="footer-icon" style="background:#ffc107;color:#0a2c5a;"><i class="fas fa-map-marker-alt"></i></span> Contact Info</h3>
+                    <p><i class="fas fa-map-marker-alt"></i> 2744/6 F, Nellai Main Road, Lakshmi Mill Rd, Kovilpatti - 628501</p>
+                    <p><i class="fas fa-phone"></i> <a href="tel:+918489831211" style="color: inherit;">+91 84898 31211</a></p>
+                    <p><i class="fas fa-envelope"></i> <a href="mailto:info@srilakshmiads.in" style="color: inherit;">info@srilakshmiads.in</a></p>
+                    <p><i class="fas fa-clock"></i> Mon-Sat: 9:00 AM - 9:00 PM</p>
+                </div>
+
+                <div class="footer-col">
+                    <h3><span class="footer-icon" style="background:#ffc107;color:#0a2c5a;"><i class="fas fa-share-alt"></i></span> Follow Us</h3>
+                    <p>Connect with us on social media</p>
                     <div class="social-icons">
-                        <a href="#"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#"><i class="fab fa-instagram"></i></a>
-                        <a href="#"><i class="fab fa-twitter"></i></a>
-                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="https://www.instagram.com/srilakshmiads.in?igsh=N3YzbzM0MmhjYTJu" class="social-insta" target="_blank"><i class="fab fa-instagram"></i></a>
+                        <a href="https://www.google.com/search?q=sri+lakshmi+ads%26+digital+offset+printing&oq=&gs_lcrp=EgZjaHJvbWUqCQgCECMYJxjqAjIJCAAQIxgnGOoCMgkIARAjGCcY6gIyCQgCECMYJxjqAjIJCAMQIxgnGOoCMgkIBBAjGCcY6gIyCQgFECMYJxjqAjIJCAYQIxgnGOoCMgkIBxAjGCcY6gLSAQkxNjQ2ajBqMTWoAgiwAgHxBWOk9Tw_Mb0g&sourceid=chrome&ie=UTF-8" class="social-google" target="_blank"><i class="fab fa-google"></i></a>
                     </div>
-                </div>
-
-                <div class="footer-col">
-                    <h3>Quick Links</h3>
-                    <a href="index.html">Home</a>
-                    <a href="index.html#why-us">Why Choose Us</a>
-                    <a href="service.html">Services</a>
-                    <a href="ourwork.html">Our Work</a>
-                    <a href="products.php">Products</a>
-                    <a href="contact.html">Contact</a>
-                </div>
-
-                <div class="footer-col">
-                    <h3>Our Products</h3>
-                    <a href="products.php">Thamboolam Bags</a>
-                    <a href="products.php">Wedding Invitation Cards</a>
-                    <a href="products.php">Flex Banners</a>
-                    <a href="products.php">Custom Designs</a>
-                </div>
-
-                <div class="footer-col">
-                    <h3>Contact Info</h3>
-                    <p><i class="fas fa-map-marker-alt"></i> 123 Printing Street, Business City</p>
-                    <p><i class="fas fa-phone"></i> +1 (234) 567-8900</p>
-                    <p><i class="fas fa-envelope"></i> info@srilakshmi.com</p>
-                    <p><i class="fas fa-clock"></i> Mon-Sat: 9:00 AM - 7:00 PM</p>
+                    <div class="footer-badges">
+                        <span class="footer-badge"><i class="fas fa-shield-alt"></i> Secure</span>
+                        <span class="footer-badge"><i class="fas fa-truck"></i> Fast Delivery</span>
+                    </div>
                 </div>
             </div>
 
             <div class="footer-bottom">
-                <p>&copy; 2024 Sri Lakshmi. All Rights Reserved.</p>
+                <p>&copy; 2026 Sri Lakshmi. All Rights Reserved.</p>
+                <p>Developed by <a href="#" style="color: var(--secondary-color);">UpgradeNow AI Technologies</a></p>
             </div>
         </div>
     </footer>
 
-    <!-- WhatsApp Floating Button -->
-    <a href="https://wa.me/1234567890" target="_blank" class="whatsapp-float">
-        <i class="fab fa-whatsapp"></i>
-    </a>
+    <!-- Floating Action Buttons -->
+    <div class="floating-buttons">
+        <a href="tel:+918489831211" class="call-float" aria-label="Call Us">
+            <i class="fas fa-phone-alt"></i>
+        </a>
+        <a href="https://wa.me/918489831211" target="_blank" class="whatsapp-float" aria-label="WhatsApp">
+            <i class="fab fa-whatsapp"></i>
+        </a>
+    </div>
 
     <!-- Product Details Modal -->
     <div id="productModal" class="product-modal">
@@ -926,12 +946,18 @@ if (isset($productsByCategory['Other Products']) && empty($productsByCategory['O
 
     .modal-category {
         display: inline-block;
-        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-        color: #ffffff;
+        background: var(--primary-color);
+        color: #ffffff !important;
         padding: 0.5rem 1rem;
         border-radius: 20px;
         font-size: 0.85rem;
         margin-bottom: 1rem;
+        border: 2px solid rgba(255, 193, 7, 0.4);
+    }
+
+    .modal-category i,
+    .modal-category span {
+        color: #ffffff !important;
     }
 
     .modal-description {

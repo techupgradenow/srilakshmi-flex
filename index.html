@@ -366,11 +366,8 @@
                     <h3><span class="footer-icon" style="background:#ffc107;color:#0a2c5a;"><i class="fas fa-share-alt"></i></span> Follow Us</h3>
                     <p>Connect with us on social media</p>
                     <div class="social-icons">
-                        <a href="#" class="social-fb"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#" class="social-insta"><i class="fab fa-instagram"></i></a>
-                        <a href="#" class="social-twitter"><i class="fab fa-twitter"></i></a>
-                        <a href="#" class="social-linkedin"><i class="fab fa-linkedin-in"></i></a>
-                        <a href="#" class="social-youtube"><i class="fab fa-youtube"></i></a>
+                        <a href="https://www.instagram.com/srilakshmiads.in?igsh=N3YzbzM0MmhjYTJu" class="social-insta" target="_blank"><i class="fab fa-instagram"></i></a>
+                        <a href="https://www.google.com/search?q=sri+lakshmi+ads%26+digital+offset+printing&oq=&gs_lcrp=EgZjaHJvbWUqCQgCECMYJxjqAjIJCAAQIxgnGOoCMgkIARAjGCcY6gIyCQgCECMYJxjqAjIJCAMQIxgnGOoCMgkIBBAjGCcY6gIyCQgFECMYJxjqAjIJCAYQIxgnGOoCMgkIBxAjGCcY6gLSAQkxNjQ2ajBqMTWoAgiwAgHxBWOk9Tw_Mb0g&sourceid=chrome&ie=UTF-8" class="social-google" target="_blank"><i class="fab fa-google"></i></a>
                     </div>
                     <div class="footer-badges">
                         <span class="footer-badge"><i class="fas fa-shield-alt"></i> Secure</span>
@@ -399,6 +396,62 @@
     <!-- JavaScript -->
     <script src="js/main.js"></script>
     <script src="js/home.js"></script>
+
+    <!-- Dynamic Banner Loader -->
+    <script>
+    (function() {
+        function loadDynamicBanners() {
+            fetch('api/banners.php')
+                .then(function(res) { return res.json(); })
+                .then(function(data) {
+                    if (!data.success || !data.banners || data.banners.length === 0) return;
+
+                    var slider = document.querySelector('.banner-slider');
+                    if (!slider) return;
+
+                    // Build new slides HTML
+                    var slidesHtml = '';
+                    data.banners.forEach(function(b, i) {
+                        var slideClass = i === 0 ? 'slide active' : 'slide';
+                        var imgTag = b.image ? '<img src="' + b.image + '" alt="' + (b.title || 'Banner') + '">' : '';
+                        var titleHtml = b.title ? '<h1>' + b.title + '</h1>' : '';
+                        var subtitleHtml = b.subtitle ? '<p>' + b.subtitle + '</p>' : '';
+                        var btnHtml = (b.button_text && b.button_link && b.button_link !== '#')
+                            ? '<a href="' + b.button_link + '" class="slide-btn">' + b.button_text + '</a>'
+                            : (b.button_text && b.button_text !== '' ? '<a href="#" class="slide-btn">' + b.button_text + '</a>' : '');
+                        slidesHtml += '<div class="' + slideClass + '">' + imgTag +
+                            (titleHtml || subtitleHtml || btnHtml ? '<div class="slide-content">' + titleHtml + subtitleHtml + btnHtml + '</div>' : '') +
+                            '</div>';
+                    });
+
+                    // Nav buttons and dots
+                    var dotsHtml = '<div class="slider-dots">';
+                    data.banners.forEach(function(b, i) {
+                        dotsHtml += '<span class="dot ' + (i === 0 ? 'active' : '') + '" data-slide="' + i + '"></span>';
+                    });
+                    dotsHtml += '</div>';
+
+                    slider.innerHTML = slidesHtml +
+                        '<button class="slider-btn prev" aria-label="Previous slide"><i class="fas fa-chevron-left"></i></button>' +
+                        '<button class="slider-btn next" aria-label="Next slide"><i class="fas fa-chevron-right"></i></button>' +
+                        dotsHtml;
+
+                    // Re-init slider (main.js / home.js uses these classes — trigger reinit if available)
+                    if (typeof initSlider === 'function') {
+                        initSlider();
+                    }
+                })
+                .catch(function() {
+                    // Silently fall back to static banners already in HTML
+                });
+        }
+
+        // Only fetch if running from a server (not file://)
+        if (window.location.protocol !== 'file:') {
+            loadDynamicBanners();
+        }
+    })();
+    </script>
 </body>
 </html>
 

@@ -5,19 +5,18 @@
  * Auto-detects local vs production environment
  */
 
-// Detect environment based on server
-$isProduction = (strpos($_SERVER['HTTP_HOST'] ?? '', 'upgradenow.in') !== false)
-                || (strpos($_SERVER['HTTP_HOST'] ?? '', 'lakshmiflex') !== false);
+// Auto-detect environment
+$_host = $_SERVER['HTTP_HOST'] ?? 'localhost';
+$_isProd = ($_host === 'srilakshmiads.in' || $_host === 'www.srilakshmiads.in');
 
-if ($isProduction) {
-    // ========== PRODUCTION CREDENTIALS ==========
-    // Update these with your hosting provider's database details
-    define('DB_HOST', 'localhost');           // Usually 'localhost' or check your hosting panel
-    define('DB_NAME', 'your_db_name');        // Database name from hosting panel
-    define('DB_USER', 'your_db_user');        // Database username from hosting panel
-    define('DB_PASS', 'your_db_password');    // Database password from hosting panel
+if ($_isProd) {
+    // ========== PRODUCTION (Hostinger) ==========
+    define('DB_HOST', '127.0.0.1');
+    define('DB_NAME', 'u282002960_srilakshmiarts');
+    define('DB_USER', 'u282002960_srilakshmiarts');
+    define('DB_PASS', 'Srilakshmi@9092');
 } else {
-    // ========== LOCAL CREDENTIALS (XAMPP) ==========
+    // ========== LOCAL (XAMPP) ==========
     define('DB_HOST', 'localhost');
     define('DB_NAME', 'proprint_db');
     define('DB_USER', 'root');
@@ -38,8 +37,8 @@ function getConnection() {
         );
         return $conn;
     } catch (PDOException $e) {
-        // In production, show generic error
-        if (strpos($_SERVER['HTTP_HOST'] ?? '', 'upgradenow.in') !== false) {
+        $h = $_SERVER['HTTP_HOST'] ?? '';
+        if ($h === 'srilakshmiads.in' || $h === 'www.srilakshmiads.in') {
             die("Database connection error. Please contact administrator.");
         }
         die("Connection failed: " . $e->getMessage());

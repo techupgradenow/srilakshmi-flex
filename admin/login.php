@@ -73,6 +73,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <div class="input-wrapper">
                         <i class="fas fa-lock"></i>
                         <input type="password" id="password" name="password" placeholder="Enter password" required>
+                        <i class="fas fa-eye toggle-password" id="togglePassword"></i>
                     </div>
                 </div>
 
@@ -86,5 +87,45 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
         </div>
     </div>
+
+    <style>
+    .toggle-password {
+        position: absolute;
+        right: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        cursor: pointer;
+        color: #aaa;
+        font-size: 0.95rem;
+        transition: color 0.2s ease;
+        z-index: 2;
+    }
+    .toggle-password:hover {
+        color: #ffc107;
+    }
+    .toggle-password.active {
+        color: #ffc107;
+    }
+    .input-wrapper {
+        position: relative;
+    }
+    </style>
+
+    <script>
+    document.getElementById('togglePassword').addEventListener('click', function() {
+        var pwd = document.getElementById('password');
+        if (pwd.type === 'password') {
+            pwd.type = 'text';
+            this.classList.remove('fa-eye');
+            this.classList.add('fa-eye-slash');
+            this.classList.add('active');
+        } else {
+            pwd.type = 'password';
+            this.classList.remove('fa-eye-slash');
+            this.classList.add('fa-eye');
+            this.classList.remove('active');
+        }
+    });
+    </script>
 </body>
 </html>

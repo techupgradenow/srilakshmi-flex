@@ -143,8 +143,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <a href="index.php" class="nav-item">
             <i class="fas fa-tachometer-alt"></i> Dashboard
         </a>
+        <a href="categories.php" class="nav-item">
+            <i class="fas fa-list"></i> Categories
+        </a>
         <a href="products.php" class="nav-item active">
             <i class="fas fa-box"></i> Products
+        </a>
+        <a href="banners.php" class="nav-item">
+            <i class="fas fa-images"></i> Banners
         </a>
     </nav>
 

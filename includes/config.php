@@ -4,19 +4,36 @@
  * ProPrint Solutions Admin Panel
  */
 
-// Error reporting (disable in production)
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+// Auto-detect environment
+$host = $_SERVER['HTTP_HOST'] ?? 'localhost';
+$isProduction = ($host === 'srilakshmiads.in' || $host === 'www.srilakshmiads.in');
 
-// Database credentials
-define('DB_HOST', 'localhost');
-define('DB_NAME', 'proprint_db');
-define('DB_USER', 'root');
-define('DB_PASS', '');
+if ($isProduction) {
+    // ========== PRODUCTION (Hostinger) ==========
+    error_reporting(0);
+    ini_set('display_errors', 0);
 
-// Site configuration
-define('SITE_NAME', 'ProPrint Solutions');
-define('SITE_URL', 'http://localhost/srilakshmi-flex');
+    define('DB_HOST', '127.0.0.1');
+    define('DB_NAME', 'u282002960_srilakshmiarts');
+    define('DB_USER', 'u282002960_srilakshmiarts');
+    define('DB_PASS', 'Srilakshmi@9092');
+
+    define('SITE_NAME', 'Sri Lakshmi Ads');
+    define('SITE_URL', 'https://srilakshmiads.in');
+} else {
+    // ========== LOCAL (XAMPP) ==========
+    error_reporting(E_ALL);
+    ini_set('display_errors', 1);
+
+    define('DB_HOST', 'localhost');
+    define('DB_NAME', 'proprint_db');
+    define('DB_USER', 'root');
+    define('DB_PASS', '');
+
+    define('SITE_NAME', 'Sri Lakshmi Ads');
+    define('SITE_URL', 'http://localhost/srilakshmi-flex');
+}
+
 define('ADMIN_URL', SITE_URL . '/admin');
 
 // Upload configuration

@@ -120,6 +120,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <a href="products.php" class="nav-item">
             <i class="fas fa-box"></i> Products
         </a>
+        <a href="banners.php" class="nav-item">
+            <i class="fas fa-images"></i> Banners
+        </a>
     </nav>
 
     <!-- Main Content -->

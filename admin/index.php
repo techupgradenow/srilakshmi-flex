@@ -19,6 +19,13 @@ $activeProducts = $conn->query("SELECT COUNT(*) FROM products WHERE status = 'ac
 
 // Get categories count
 $totalCategories = $conn->query("SELECT COUNT(*) FROM categories")->fetchColumn();
+
+// Get banners count (handle if table doesn't exist yet)
+try {
+    $totalBanners = $conn->query("SELECT COUNT(*) FROM banners WHERE status = 'active'")->fetchColumn();
+} catch (Exception $e) {
+    $totalBanners = 0;
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -58,6 +65,9 @@ $totalCategories = $conn->query("SELECT COUNT(*) FROM categories")->fetchColumn(
         <a href="products.php" class="nav-item">
             <i class="fas fa-box"></i> Products
         </a>
+        <a href="banners.php" class="nav-item">
+            <i class="fas fa-images"></i> Banners
+        </a>
     </nav>
 
     <!-- Main Content -->
@@ -93,6 +103,16 @@ $totalCategories = $conn->query("SELECT COUNT(*) FROM categories")->fetchColumn(
                     <span class="stat-value"><?php echo $totalCategories; ?></span>
                 </div>
             </div>
+
+            <div class="stat-card">
+                <div class="stat-icon" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                    <i class="fas fa-images"></i>
+                </div>
+                <div class="stat-content">
+                    <span class="stat-label">Active Banners</span>
+                    <span class="stat-value"><?php echo $totalBanners; ?></span>
+                </div>
+            </div>
         </div>
 
         <!-- Quick Links -->
@@ -110,6 +130,9 @@ $totalCategories = $conn->query("SELECT COUNT(*) FROM categories")->fetchColumn(
                     </a>
                     <a href="add-product.php" class="btn btn-primary">
                         <i class="fas fa-plus"></i> Add New Product
+                    </a>
+                    <a href="banners.php" class="btn btn-primary">
+                        <i class="fas fa-images"></i> Manage Banners
                     </a>
                 </div>
             </div>

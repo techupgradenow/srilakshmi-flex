@@ -95,6 +95,9 @@ if (isset($_GET['added'])) $success = 'Product added successfully!';
         <a href="products.php" class="nav-item active">
             <i class="fas fa-box"></i> Products
         </a>
+        <a href="banners.php" class="nav-item">
+            <i class="fas fa-images"></i> Banners
+        </a>
     </nav>
 
     <!-- Main Content -->

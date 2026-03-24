@@ -54,6 +54,9 @@ $success = isset($_GET['added']) ? 'Category added successfully!' :
         <a href="products.php" class="nav-item">
             <i class="fas fa-box"></i> Products
         </a>
+        <a href="banners.php" class="nav-item">
+            <i class="fas fa-images"></i> Banners
+        </a>
     </nav>
 
     <!-- Main Content -->

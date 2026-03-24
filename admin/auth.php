@@ -25,7 +25,7 @@ function isLoggedIn() {
 // Require login - redirect if not authenticated
 function requireLogin() {
     if (!isLoggedIn()) {
-        header('Location: login.php');
+        header('Location: /admin/login.php');
         exit;
     }
 }
@@ -51,7 +51,7 @@ function loginUser($username, $password) {
 function logoutUser() {
     session_unset();
     session_destroy();
-    header('Location: login.php');
+    header('Location: /admin/login.php');
     exit;
 }
 ?>
