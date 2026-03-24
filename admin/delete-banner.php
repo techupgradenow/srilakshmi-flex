@@ -3,6 +3,8 @@
  * Delete Banner Handler
  * Deletes banner from DB and its image file from server
  */
+header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
+header('Pragma: no-cache');
 
 require_once 'auth.php';
 requireLogin();
