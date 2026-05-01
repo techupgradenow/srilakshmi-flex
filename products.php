@@ -67,6 +67,8 @@ if (isset($productsByCategory['Other Products']) && empty($productsByCategory['O
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Products | Sri Lakshmi</title>
+    <link rel="icon" type="image/png" href="images/Sri Lakshmi Logo.png">
+    <link rel="apple-touch-icon" href="images/Sri Lakshmi Logo.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Montserrat:wght@400;500;600;700;800&display=swap">
     <link rel="stylesheet" href="css/style.css">
@@ -306,7 +308,7 @@ if (isset($productsByCategory['Other Products']) && empty($productsByCategory['O
                     <h3><span class="footer-icon" style="background:#ffc107;color:#0a2c5a;"><i class="fas fa-map-marker-alt"></i></span> Contact Info</h3>
                     <p><i class="fas fa-map-marker-alt"></i> 2744/6 F, Nellai Main Road, Lakshmi Mill Rd, Kovilpatti - 628501</p>
                     <p><i class="fas fa-phone"></i> <a href="tel:+918489831211" style="color: inherit;">+91 84898 31211</a></p>
-                    <p><i class="fas fa-envelope"></i> <a href="mailto:info@srilakshmiads.in" style="color: inherit;">info@srilakshmiads.in</a></p>
+                    <p><i class="fas fa-envelope"></i> <a href="mailto:srilakshmiads.business@gmail.com" style="color: inherit;">srilakshmiads.business@gmail.com</a></p>
                     <p><i class="fas fa-clock"></i> Mon-Sat: 9:00 AM - 9:00 PM</p>
                 </div>
 

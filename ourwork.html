@@ -241,7 +241,7 @@
                     <h3><span class="footer-icon" style="background:#ffc107;color:#0a2c5a;"><i class="fas fa-map-marker-alt"></i></span> Contact Info</h3>
                     <p><i class="fas fa-map-marker-alt"></i> 2744/6 F, Nellai Main Road, Lakshmi Mill Rd, Kovilpatti - 628501</p>
                     <p><i class="fas fa-phone"></i> <a href="tel:+918489831211" style="color: inherit;">+91 84898 31211</a></p>
-                    <p><i class="fas fa-envelope"></i> <a href="mailto:info@srilakshmiads.in" style="color: inherit;">info@srilakshmiads.in</a></p>
+                    <p><i class="fas fa-envelope"></i> <a href="mailto:srilakshmiads.business@gmail.com" style="color: inherit;">srilakshmiads.business@gmail.com</a></p>
                     <p><i class="fas fa-clock"></i> Mon-Sat: 9:00 AM - 9:00 PM</p>
                 </div>
                 <div class="footer-col">
@@ -277,6 +277,49 @@
     <!-- JavaScript -->
     <script src="js/main.js"></script>
     <script src="js/ourwork.js"></script>
+    <script>
+    // Dynamic Our Work loader from admin panel
+    (function() {
+        if (window.location.protocol === 'file:') return;
+        fetch('api/ourwork.php')
+            .then(r => r.json())
+            .then(data => {
+                if (!data.success || !data.categories || data.categories.length === 0) return;
+                const grid = document.querySelector('.projects-grid');
+                if (!grid) return;
+                // Collect all dynamic images
+                let dynamicItems = [];
+                data.categories.forEach(cat => {
+                    if (cat.images && cat.images.length > 0) {
+                        cat.images.forEach(img => {
+                            dynamicItems.push({
+                                image: img.image,
+                                title: img.title || cat.name,
+                                description: cat.name
+                            });
+                        });
+                    }
+                });
+                if (dynamicItems.length === 0) return;
+                // Replace static content with dynamic
+                grid.innerHTML = '';
+                dynamicItems.forEach(item => {
+                    const div = document.createElement('div');
+                    div.className = 'project-item zoom-in';
+                    div.innerHTML = `
+                        <img src="${item.image}" alt="${item.title}" loading="lazy">
+                        <div class="project-overlay">
+                            <h3>${item.title}</h3>
+                            <p>${item.description}</p>
+                            <a href="contact.html" class="btn btn-primary">Order Similar</a>
+                        </div>
+                    `;
+                    grid.appendChild(div);
+                });
+            })
+            .catch(() => { /* Keep static content as fallback */ });
+    })();
+    </script>
 </body>
 </html>
 

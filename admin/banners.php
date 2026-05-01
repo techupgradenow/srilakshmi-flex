@@ -119,6 +119,12 @@ $success = isset($_GET['added'])   ? 'Banner added successfully!'   :
         <a href="banners.php" class="nav-item active">
             <i class="fas fa-images"></i> Banners
         </a>
+        <a href="ourwork.php" class="nav-item">
+            <i class="fas fa-briefcase"></i> Our Work
+        </a>
+        <a href="enquiries.php" class="nav-item">
+            <i class="fas fa-envelope"></i> Enquiries
+        </a>
     </nav>
 
     <!-- Main Content -->

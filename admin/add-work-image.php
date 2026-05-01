@@ -1,6 +1,6 @@
 <?php
 /**
- * Add Banner Page
+ * Add Work Image Page
  * Sri Lakshmi Admin Panel
  */
 error_reporting(E_ALL);
@@ -15,20 +15,17 @@ require_once __DIR__ . '/../config/database.php';
 
 $conn = getConnection();
 
-// Check if banners table exists, create or repair if needed
+// Check if work_images table exists, create if needed
 try {
-    $check = $conn->query("SHOW TABLES LIKE 'banners'")->fetch();
+    $check = $conn->query("SHOW TABLES LIKE 'work_images'")->fetch();
     if ($check) {
-        // Auto-repair: add missing columns
-        $cols = $conn->query("SHOW COLUMNS FROM banners")->fetchAll(PDO::FETCH_COLUMN);
+        $cols = $conn->query("SHOW COLUMNS FROM work_images")->fetchAll(PDO::FETCH_COLUMN);
         $fixes = [
-            'title'       => "ALTER TABLE `banners` ADD COLUMN `title` varchar(255) DEFAULT NULL",
-            'subtitle'    => "ALTER TABLE `banners` ADD COLUMN `subtitle` varchar(500) DEFAULT NULL",
-            'button_text' => "ALTER TABLE `banners` ADD COLUMN `button_text` varchar(100) DEFAULT 'Learn More'",
-            'button_link' => "ALTER TABLE `banners` ADD COLUMN `button_link` varchar(255) DEFAULT '#'",
-            'status'      => "ALTER TABLE `banners` ADD COLUMN `status` enum('active','inactive') DEFAULT 'active'",
-            'sort_order'  => "ALTER TABLE `banners` ADD COLUMN `sort_order` int(11) DEFAULT 0",
-            'created_at'  => "ALTER TABLE `banners` ADD COLUMN `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP",
+            'category_id' => "ALTER TABLE `work_images` ADD COLUMN `category_id` int(11) NOT NULL",
+            'image'       => "ALTER TABLE `work_images` ADD COLUMN `image` varchar(255) NOT NULL",
+            'title'       => "ALTER TABLE `work_images` ADD COLUMN `title` varchar(255) DEFAULT NULL",
+            'sort_order'  => "ALTER TABLE `work_images` ADD COLUMN `sort_order` int(11) DEFAULT 0",
+            'created_at'  => "ALTER TABLE `work_images` ADD COLUMN `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP",
         ];
         foreach ($fixes as $col => $sql) {
             if (!in_array($col, $cols)) {
@@ -36,14 +33,11 @@ try {
             }
         }
     } else {
-        $conn->exec("CREATE TABLE IF NOT EXISTS `banners` (
+        $conn->exec("CREATE TABLE IF NOT EXISTS `work_images` (
             `id` int(11) NOT NULL AUTO_INCREMENT,
+            `category_id` int(11) NOT NULL,
             `image` varchar(255) NOT NULL,
             `title` varchar(255) DEFAULT NULL,
-            `subtitle` varchar(500) DEFAULT NULL,
-            `button_text` varchar(100) DEFAULT 'Learn More',
-            `button_link` varchar(255) DEFAULT '#',
-            `status` enum('active','inactive') DEFAULT 'active',
             `sort_order` int(11) DEFAULT 0,
             `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
             PRIMARY KEY (`id`)
@@ -51,19 +45,32 @@ try {
     }
 } catch (Exception $e) {}
 
+$category_id = isset($_GET['category_id']) ? (int)$_GET['category_id'] : 0;
+if (!$category_id) {
+    header('Location: ourwork.php');
+    exit;
+}
+
+// Load category name for display
+$catStmt = $conn->prepare("SELECT * FROM work_categories WHERE id = ?");
+$catStmt->execute([$category_id]);
+$category = $catStmt->fetch();
+
+if (!$category) {
+    header('Location: ourwork.php?error=category_not_found');
+    exit;
+}
+
 $error = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $title       = trim($_POST['title'] ?? '');
-    $subtitle    = trim($_POST['subtitle'] ?? '');
-    $button_text = trim($_POST['button_text'] ?? 'Learn More');
-    $button_link = trim($_POST['button_link'] ?? '#');
-    $status      = $_POST['status'] ?? 'active';
-    $sort_order  = (int)($_POST['sort_order'] ?? 0);
-    $filename    = '';
+    $title      = trim($_POST['title'] ?? '');
+    $sort_order = (int)($_POST['sort_order'] ?? 0);
+    $category_id = (int)($_POST['category_id'] ?? $category_id);
+    $filename   = '';
 
     if (!isset($_FILES['image']) || $_FILES['image']['error'] !== UPLOAD_ERR_OK) {
-        $error = 'Please upload a banner image';
+        $error = 'Please upload an image';
     } else {
         $file = $_FILES['image'];
         $allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
@@ -74,7 +81,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } elseif ($file['size'] > $maxSize) {
             $error = 'File too large. Maximum 5MB allowed';
         } else {
-            $uploadDir = __DIR__ . '/../uploads/banners/';
+            $uploadDir = __DIR__ . '/../uploads/work/';
             if (!file_exists($uploadDir)) {
                 mkdir($uploadDir, 0755, true);
             }
@@ -88,12 +95,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     if (empty($error) && !empty($filename)) {
-        $stmt = $conn->prepare("INSERT INTO banners (image, title, subtitle, button_text, button_link, status, sort_order) VALUES (?,?,?,?,?,?,?)");
-        if ($stmt->execute([$filename, $title, $subtitle, $button_text, $button_link, $status, $sort_order])) {
-            header('Location: banners.php?added=1');
-            exit;
-        } else {
-            $error = 'Failed to save banner to database';
+        try {
+            $stmt = $conn->prepare("INSERT INTO work_images (category_id, image, title, sort_order) VALUES (?,?,?,?)");
+            if ($stmt->execute([$category_id, $filename, $title, $sort_order])) {
+                header('Location: ourwork.php?img_added=1');
+                exit;
+            } else {
+                $error = 'Failed to save image to database';
+            }
+        } catch (Exception $e) {
+            $error = 'Database error: ' . $e->getMessage();
         }
     }
 }
@@ -103,7 +114,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Banner | Sri Lakshmi Admin</title>
+    <title>Add Work Image | Sri Lakshmi Admin</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/admin.css">
@@ -112,7 +123,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <!-- Header -->
     <header class="admin-header">
         <div class="header-left">
-            <h1 class="admin-title">Add Banner</h1>
+            <h1 class="admin-title">Add Work Image</h1>
         </div>
         <div class="header-right">
             <a href="../index.html" target="_blank" class="btn btn-outline">
@@ -135,10 +146,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <a href="products.php" class="nav-item">
             <i class="fas fa-box"></i> Products
         </a>
-        <a href="banners.php" class="nav-item active">
+        <a href="banners.php" class="nav-item">
             <i class="fas fa-images"></i> Banners
         </a>
-        <a href="ourwork.php" class="nav-item">
+        <a href="ourwork.php" class="nav-item active">
             <i class="fas fa-briefcase"></i> Our Work
         </a>
         <a href="enquiries.php" class="nav-item">
@@ -157,20 +168,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         <div class="card">
             <div class="card-header">
-                <h2><i class="fas fa-plus-circle"></i> Banner Information</h2>
+                <h2><i class="fas fa-plus-circle"></i> Add Image to "<?php echo htmlspecialchars($category['name']); ?>"</h2>
+                <a href="ourwork.php" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Back
+                </a>
             </div>
             <div class="card-body">
                 <form method="POST" enctype="multipart/form-data" class="product-form">
+                    <input type="hidden" name="category_id" value="<?php echo (int)$category_id; ?>">
 
                     <div class="form-group">
-                        <label for="image">Banner Image *</label>
+                        <label for="image">Image *</label>
                         <div class="file-upload-wrapper">
                             <input type="file" id="image" name="image" accept="image/*" required>
                             <div class="file-upload-box" id="dropZone">
                                 <i class="fas fa-cloud-upload-alt"></i>
-                                <span>Upload Banner Image</span>
+                                <span>Upload Work Image</span>
                                 <small>Click to browse or drag and drop</small>
-                                <small>JPG, PNG, GIF, WEBP (Max 5MB) — Recommended: 1920×600px</small>
+                                <small>JPG, PNG, GIF, WEBP (Max 5MB)</small>
                             </div>
                             <div class="image-preview" id="imagePreview"></div>
                         </div>
@@ -179,53 +194,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <div class="form-group">
                         <label for="title">Title (Optional)</label>
                         <input type="text" id="title" name="title" class="form-control"
-                               placeholder="e.g. Best Flex Printing in Kovilpatti"
+                               placeholder="e.g. Wedding Banner for Client"
                                value="<?php echo htmlspecialchars($_POST['title'] ?? ''); ?>">
-                        <small class="form-hint">Displayed as heading over the banner image</small>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="subtitle">Subtitle (Optional)</label>
-                        <input type="text" id="subtitle" name="subtitle" class="form-control"
-                               placeholder="e.g. Quality you can trust"
-                               value="<?php echo htmlspecialchars($_POST['subtitle'] ?? ''); ?>">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="button_text">Button Text (Optional)</label>
-                        <input type="text" id="button_text" name="button_text" class="form-control"
-                               placeholder="e.g. Get Started"
-                               value="<?php echo htmlspecialchars($_POST['button_text'] ?? 'Learn More'); ?>">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="button_link">Button Link (Optional)</label>
-                        <input type="text" id="button_link" name="button_link" class="form-control"
-                               placeholder="e.g. contact.html"
-                               value="<?php echo htmlspecialchars($_POST['button_link'] ?? '#'); ?>">
-                        <small class="form-hint">Use relative links like contact.html, service.html, or # to hide button</small>
+                        <small class="form-hint">Optional caption for the image</small>
                     </div>
 
                     <div class="form-group">
                         <label for="sort_order">Display Order</label>
                         <input type="number" id="sort_order" name="sort_order" class="form-control"
                                placeholder="0" min="0" value="<?php echo (int)($_POST['sort_order'] ?? 0); ?>">
-                        <small class="form-hint">Lower number = shown first. Use 0, 1, 2... to order banners</small>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="status">Status</label>
-                        <select id="status" name="status" class="form-control">
-                            <option value="active" <?php echo (!isset($_POST['status']) || $_POST['status'] === 'active') ? 'selected' : ''; ?>>Active</option>
-                            <option value="inactive" <?php echo (isset($_POST['status']) && $_POST['status'] === 'inactive') ? 'selected' : ''; ?>>Inactive</option>
-                        </select>
+                        <small class="form-hint">Lower number = shown first</small>
                     </div>
 
                     <div class="form-actions">
                         <button type="submit" class="btn btn-primary">
-                            <i class="fas fa-save"></i> Add Banner
+                            <i class="fas fa-save"></i> Add Image
                         </button>
-                        <a href="banners.php" class="btn btn-secondary">
+                        <a href="ourwork.php" class="btn btn-secondary">
                             <i class="fas fa-times"></i> Cancel
                         </a>
                     </div>

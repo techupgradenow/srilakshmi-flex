@@ -1,42 +1,68 @@
 // Contact page specific JavaScript
 $(document).ready(function() {
+    // Auto-fill subject from URL ?service= parameter
+    var urlParams = new URLSearchParams(window.location.search);
+    var serviceParam = urlParams.get('service');
+    if (serviceParam) {
+        $('#subject').val(serviceParam + ' Quote');
+        $('#service-hidden').val(serviceParam);
+        $('#subject').parent().addClass('focused');
+    }
+
     // Form submission - works with both old and new form classes
     $('.contact-form, .modern-contact-form').submit(function(e) {
         e.preventDefault();
-        
+
+        var $form = $(this);
+
         // Get form data
         var formData = {
             name: $('#name').val(),
             email: $('#email').val(),
             phone: $('#phone').val(),
             subject: $('#subject').val(),
-            message: $('#message').val()
+            message: $('#message').val(),
+            service: $('#service-hidden').val() || ''
         };
-        
+
         // Basic validation
         if (!formData.name || !formData.email || !formData.message) {
             showNotification('Please fill in all required fields.', 'error');
             return;
         }
-        
+
         // Email validation
         var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(formData.email)) {
             showNotification('Please enter a valid email address.', 'error');
             return;
         }
-        
+
         // Disable submit button
-        var $submitBtn = $(this).find('button[type="submit"]');
+        var $submitBtn = $form.find('button[type="submit"]');
         var originalText = $submitBtn.html();
         $submitBtn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i> Sending...');
-        
-        // Simulate form submission (replace with actual AJAX call)
-        setTimeout(function() {
-            showNotification('Thank you for your enquiry! We will get back to you within 24 hours.', 'success');
-            $('.contact-form, .modern-contact-form')[0].reset();
-            $submitBtn.prop('disabled', false).html(originalText);
-        }, 1500);
+
+        $.ajax({
+            url: 'api/enquiry.php',
+            method: 'POST',
+            data: formData,
+            dataType: 'json',
+            success: function(response) {
+                if (response.success) {
+                    showNotification('Thank you for your enquiry! We will get back to you within 24 hours.', 'success');
+                    $form[0].reset();
+                    $form.find('.modern-form-group').removeClass('focused');
+                } else {
+                    showNotification(response.error || 'Something went wrong. Please try again.', 'error');
+                }
+                $submitBtn.prop('disabled', false).html(originalText);
+            },
+            error: function() {
+                showNotification('Network error. Please try again later.', 'error');
+                $submitBtn.prop('disabled', false).html(originalText);
+            }
+        });
     });
     
     // Modern form field animations

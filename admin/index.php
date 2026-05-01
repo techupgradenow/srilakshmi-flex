@@ -26,6 +26,15 @@ try {
 } catch (Exception $e) {
     $totalBanners = 0;
 }
+
+// Get enquiries counts
+try {
+    $totalEnquiries = $conn->query("SELECT COUNT(*) FROM enquiries")->fetchColumn();
+    $newEnquiries = $conn->query("SELECT COUNT(*) FROM enquiries WHERE status = 'new'")->fetchColumn();
+} catch (Exception $e) {
+    $totalEnquiries = 0;
+    $newEnquiries = 0;
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -67,6 +76,12 @@ try {
         </a>
         <a href="banners.php" class="nav-item">
             <i class="fas fa-images"></i> Banners
+        </a>
+        <a href="ourwork.php" class="nav-item">
+            <i class="fas fa-briefcase"></i> Our Work
+        </a>
+        <a href="enquiries.php" class="nav-item">
+            <i class="fas fa-envelope"></i> Enquiries
         </a>
     </nav>
 
@@ -111,6 +126,16 @@ try {
                 <div class="stat-content">
                     <span class="stat-label">Active Banners</span>
                     <span class="stat-value"><?php echo $totalBanners; ?></span>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon" style="background: linear-gradient(135deg, #ff9a44 0%, #ff6e7f 100%);">
+                    <i class="fas fa-envelope"></i>
+                </div>
+                <div class="stat-content">
+                    <span class="stat-label">Enquiries <?php if ($newEnquiries > 0): ?><span style="background:var(--secondary);color:var(--primary);padding:0.1rem 0.5rem;border-radius:50px;font-size:0.65rem;margin-left:0.4rem;font-weight:600;"><?php echo $newEnquiries; ?> NEW</span><?php endif; ?></span>
+                    <span class="stat-value"><?php echo $totalEnquiries; ?></span>
                 </div>
             </div>
         </div>

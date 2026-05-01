@@ -90,10 +90,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <style>
     .toggle-password {
-        position: absolute;
-        right: 15px;
-        top: 50%;
-        transform: translateY(-50%);
+        position: absolute !important;
+        right: 15px !important;
+        left: auto !important;
+        top: 50% !important;
+        transform: translateY(-50%) !important;
         cursor: pointer;
         color: #aaa;
         font-size: 0.95rem;
@@ -106,8 +107,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     .toggle-password.active {
         color: #ffc107;
     }
-    .input-wrapper {
-        position: relative;
+    #password {
+        padding-right: 2.75rem !important;
     }
     </style>
 
